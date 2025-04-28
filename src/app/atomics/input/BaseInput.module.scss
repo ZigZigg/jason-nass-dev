@@ -1,0 +1,35 @@
+:global(.ant-input).baseInput{
+    height: 48px;
+    border-radius: 4px;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #E4E4E4;
+
+    &:hover {
+        border: 1px solid #1890ff;
+    }
+}
+
+:global(.ant-input-password).baseInput{
+    height: 48px;
+    border-radius: 4px !important;
+    padding: 12px !important;
+    background-color: #fff !important;
+    border: 1px solid #E4E4E4 !important;
+
+    &:hover {
+        border: 1px solid #1890ff;
+    }
+}
+
+:global(.ant-input-affix-wrapper).baseInput{
+    height: 48px;
+    border-radius: 8px;
+    padding: 18px 14px;
+    background-color: #F5F5F2;
+    border: none;
+
+    &:hover {
+        border: 1px solid #1890ff;
+    }
+}
