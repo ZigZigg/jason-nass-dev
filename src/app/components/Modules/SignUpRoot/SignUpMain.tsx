@@ -3,6 +3,7 @@
 import BaseButton from '@/app/atomics/button/BaseButton';
 import BaseInput from '@/app/atomics/input/BaseInput';
 import NotificationContext from '@/app/context/NotificationContext';
+import { useUpdateStyle } from '@/app/hooks/useUpdateStyle';
 import { Form, message } from 'antd';
 import { IconType } from 'antd/es/notification/interface';
 
@@ -15,7 +16,7 @@ export default function SignUpMain() {
   const router = useRouter();
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
-
+  useUpdateStyle()
   const onNotification = (description: string, type: IconType = 'error') => {
     api!.open({
       message: '',
@@ -56,7 +57,7 @@ export default function SignUpMain() {
   };
 
   return (
-    <div className="w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F5F5F5] pb-[74px] md:pb-[0px]">
+    <div className="w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F4F9FF] pb-[74px] md:pb-[0px]">
       <div className="flex flex-col justify-center items-center w-full h-fit md:w-[420px] p-[20px] md:p-[40px] bg-white rounded-[16px]">
         <Form
           name="login"
@@ -69,8 +70,10 @@ export default function SignUpMain() {
           <Form.Item
             style={{ marginTop: '16px', marginBottom: '16px' }}
             label="Name"
-            name="name"
+            name="name" 
+            className='custom-input-label'
             rules={[
+              { required: true, message: 'Please input your name!' },
               {
                 validator: (_, value) => {
                   if (!value || value.trim() === '') {
@@ -81,7 +84,7 @@ export default function SignUpMain() {
               },
             ]}
           >
-            <BaseInput />
+            <BaseInput placeholder='Enter your name' />
           </Form.Item>
           <Form.Item
             style={{ marginTop: '16px', marginBottom: '16px' }}
@@ -112,7 +115,7 @@ export default function SignUpMain() {
               },
             ]}
           >
-            <BaseInput />
+            <BaseInput placeholder='Enter your email' />
           </Form.Item>
 
           <Form.Item
@@ -128,7 +131,7 @@ export default function SignUpMain() {
               },
             ]}
           >
-            <BaseInput type="password" />
+            <BaseInput type="password" placeholder='Enter your password' />
           </Form.Item>
           <input
             type="password"
@@ -144,7 +147,7 @@ export default function SignUpMain() {
           />
           <Form.Item
             style={{ marginTop: '16px', marginBottom: '32px' }}
-            label="Confirm Password"
+            label="Confirm password"
             name="confirmPassword"
             dependencies={['password']}
             rules={[
@@ -161,7 +164,7 @@ export default function SignUpMain() {
               }),
             ]}
           >
-            <BaseInput type="password" />
+            <BaseInput type="password" placeholder='Enter your password' />
           </Form.Item>
 
           <Form.Item style={{ marginBottom: '0px' }}>

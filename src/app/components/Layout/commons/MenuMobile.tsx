@@ -1,6 +1,7 @@
 import BaseButton from '@/app/atomics/button/BaseButton';
+import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 interface Props {
@@ -11,15 +12,15 @@ interface Props {
 
 const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => {
   const pathname = usePathname();
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
-  
+  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+  const router = useRouter();
   // Define navigation links based on authentication status
   const navLinks = useMemo(() => {
     if (authStatus === 'unauthenticated') {
       return [
-        { href: '/about', label: 'About' },
-        { href: '/contact', label: 'Contact' },
-        { href: '/help', label: 'Help' },
+        { href: '/', label: 'About' },
+        { href: 'https://www.nass.us/contact-us', label: 'Contact' },
+        { href: 'https://www.nass.us/benefits', label: 'Help' },
       ];
     }
     return [
@@ -29,12 +30,17 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
     ];
   }, [authStatus]);
   
+  const onSignOut = () => {
+    setOpenMenuMobile(false);
+    handleSignOut();
+  }
+
   return (
     <div className="w-[100%] py-[40px] px-[16px]">
       <div className="flex flex-col gap-[32px] mb-[190px]">
         {navLinks.map((link) => (
           <Link
-            key={link.href}
+            key={`key-${link.label}`}
             href={link.href}
             className="uppercase font-oswald hover:text-gray-300 text-[36px] font-[700] !text-[#fff]"
             onClick={() => setOpenMenuMobile(false)}
@@ -70,17 +76,15 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
       )}
       
       {authStatus === 'authenticated' && (
-        <div id="menu-mobile-buttons" className="flex flex-col gap-[24px]">
-          <BaseButton 
-            onClick={() => {
-              setOpenMenuMobile(false);
-              handleSignOut();
-            }} 
-            className="bg-transparent h-auto !py-[8px]" 
-            size="large"
-          >
-            <span className="text-[#212B36] text-[16px] font-[500] font-oswald">LOG OUT</span>
-          </BaseButton>
+        <div id="menu-mobile-buttons" className="flex flex-col gap-[16px]">
+          <div className='flex flex-row items-center py-[8px] gap-[24px]' onClick={() => {router.push('/change-password')}}>
+            <Image src='/images/icons/user-white.svg' alt='user' width={24} height={24} />
+            <span className='text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]'>Account Settings</span>
+          </div>
+          <div onClick={onSignOut} className='flex flex-row items-center py-[8px] gap-[24px]'>
+            <Image src='/images/icons/log-out-white.svg' alt='user' width={24} height={24} />
+            <span className='text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]'>Log Out</span>
+          </div>
         </div>
       )}
     </div>

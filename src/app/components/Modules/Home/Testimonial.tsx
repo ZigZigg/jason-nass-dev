@@ -16,7 +16,7 @@ const Testimonial = () => {
   const testimonials = [
     {
       id: 1,
-      quote: 'This organization truly understands the challenges we face in modern education.',
+      quote: 'NAS has been invaluable for my leadership growth.',
       name: 'Jane Doe',
       title: 'Superintendent',
       image: '/images/testimonial-image.png',

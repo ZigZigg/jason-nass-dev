@@ -78,3 +78,11 @@ input[type="password"] {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.custom-checkbox .ant-checkbox-inner {
+  border-color: #667085!important; /* your desired color */
+}
+
+.custom-input-label label{
+  font-size: 16px !important;
+}

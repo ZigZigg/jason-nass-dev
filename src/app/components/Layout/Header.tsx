@@ -1,13 +1,12 @@
 import Link from 'next/link';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import BaseButton from '@/app/atomics/button/BaseButton';
 import { Dropdown, MenuProps, Popover } from 'antd';
 import { useRouter, usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import MenuMobile from './commons/MenuMobile';
-
-
+import { useOrientation } from '@/app/providers/OrientationProvider';
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -15,28 +14,33 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [openMenuMobile, setOpenMenuMobile] = useState(false);
-// Define navigation links
+  const [openMenuDesktop, setOpenMenuDesktop] = useState(false);
+  const orientation = useOrientation();
+  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+  // Define navigation links
   const navLinks = useMemo(() => {
-
-    if(status === 'authenticated') {
+    if (isAuthPage) {
+      return [];
+    }
+    if (status === 'authenticated') {
       return [
         { href: '/', label: 'Dashboard' },
         { href: '#', label: 'Resources' },
         { href: '#', label: 'Support' },
-      ]
+      ];
     }
     return [
-      { href: '/about', label: 'About' },
-      { href: '/contact', label: 'Contact' },
-      { href: '/help', label: 'Help' },
-    ]
-  }, [status]);
+      { href: '/', label: 'About' },
+      { href: 'https://www.nass.us/contact-us', label: 'Contact' },
+      { href: 'https://www.nass.us/benefits', label: 'Help' },
+    ];
+  }, [status, isAuthPage]);
 
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
-        <div className="flex flex-row items-center gap-[8px]" onClick={() => {}}>
+        <div className="flex flex-row items-center gap-[8px]" onClick={() => {router.push('/change-password')}}>
           <Image src="/images/icons/user.svg" alt="icon-account-settings" width={16} height={16} />
           <span className="text-[14px] font-[500] font-roboto text-[#637381]">
             Account Settings
@@ -56,10 +60,16 @@ const Header = () => {
   ];
   const handleSignOut = async () => {
     await signOut({ redirect: false }); // Sign out without redirecting
-    router.push('/login'); // Redirect to the login page after signing out
+    router.push('/'); // Redirect to the login page after signing out
   };
+
+  useEffect(() => {
+    setOpenMenuMobile(false);
+    setOpenMenuDesktop(false);
+  }, [orientation]);
+
   const renderRightActions = useCallback(() => {
-    const isAuthPage = pathname === '/login' || pathname === '/signup';
+    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
 
     return (
       <div className="flex items-center gap-4">
@@ -111,11 +121,17 @@ const Header = () => {
         </Popover>
       </div>
     );
-  }, [status, openMenuMobile, pathname]);
+  }, [status, openMenuMobile, pathname, openMenuDesktop, setOpenMenuDesktop]);
 
   const renderAuthActions = useCallback(() => {
     return (
-      <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']}>
+      <Dropdown
+        menu={{ items }}
+        placement="bottomRight"
+        trigger={['click']}
+        open={openMenuDesktop}
+        onOpenChange={setOpenMenuDesktop}
+      >
         <div className="flex flex-row items-center gap-[12px] cursor-pointer">
           <Image
             src={session?.user?.avatar || '/default-avatar.png'} // Path to your logo file in the public folder
@@ -137,7 +153,7 @@ const Header = () => {
         </div>
       </Dropdown>
     );
-  }, [session]);
+  }, [session, openMenuDesktop, setOpenMenuDesktop]);
 
   const renderUnAuthActions = useCallback(() => {
     return (
@@ -161,21 +177,26 @@ const Header = () => {
   }, []);
 
   const pageActions = () => {
-    const isAuthPage = pathname === '/login' || pathname === '/signup';
+    const isAuthPage = ['/login', '/signup'].includes(pathname);
+    const isHomePage = ['/', '/dashboard', '/forgot-password', '/reset-password'].includes(pathname);
+    if (isHomePage) {
+      return null;
+    }
     return (
-      <div className={`flex flex-row h-[70px] flex md:hidden w-full px-[16px] md:px-[0px] ${isAuthPage ? 'bg-[#F5F5F5]' : 'bg-[#fff]'}`}>
+      <div
+        className={`flex flex-row h-[70px] flex md:hidden w-full px-[16px] md:px-[0px] ${
+          isAuthPage ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
+        }`}
+      >
         <div className="flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link 
-            href="/" 
-            className="font-roboto text-[14px] text-[#212B36] hover:underline"
-          >
-            Back to Dashboard
+          <Link href="/" className="font-roboto text-[14px] text-[#212B36] hover:underline">
+            {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
           </Link>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="w-full h-auto flex flex-col">
@@ -184,7 +205,7 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={`key-${link.label}`}
                 href={link.href}
                 className="uppercase font-oswald hover:text-gray-300 text-[16px] md:text-[12px] xl:text-[16px] font-[400] !text-[#fff]"
               >
@@ -192,10 +213,9 @@ const Header = () => {
               </Link>
             ))}
           </div>
-          
+
           <div
             id="logo-container"
-            onClick={() => router.push('/')}
             className="h-[54px] w-[141px] md:w-[240px] xl:w-[392px] flex items-center justify-center"
           >
             <Image
@@ -206,7 +226,7 @@ const Header = () => {
               className="object-contain hidden md:block"
             />
             <Image
-              src="/images/nass-logo-mobile.svg"
+              src="/images/nass-logo-mobile.png"
               alt="Logo"
               width={141}
               height={54}

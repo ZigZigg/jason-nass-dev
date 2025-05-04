@@ -151,7 +151,7 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
 const ResourceArticles: React.FC = () => {
   return (
     <div className="flex flex-col px-[16px] md:px-[0px] w-full md:w-[220px] xl:w-[320px] flex-shrink-0 gap-6">
-      <h3 className="text-2xl md:text-3xl uppercase text-[#205A93] font-semibold">
+      <h3 className="text-[32px] uppercase text-[#205A93] font-semibold">
         Resource Articles
       </h3>
 

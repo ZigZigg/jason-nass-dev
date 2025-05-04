@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import Image from 'next/image';
 import { Typography } from 'antd';
 
@@ -41,15 +41,12 @@ const TrendingNews = () => {
           {trendingNews.map((news) => (
             <div key={news.id} className="flex flex-col gap-[24px] md:gap-[18px] xl:gap-8">
               <div className="relative w-full aspect-[370/240] xl:aspect-[380/253] rounded-lg overflow-hidden">
-                <Image
-                  src={news.image}
-                  alt={news.title}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={news.image} alt={news.title} fill className="object-cover" />
                 {news.tag && (
-                  <div className="absolute top-2 left-2 bg-black/30 text-white/80 px-2 py-1 rounded backdrop-blur-md border border-white/80 text-sm">
-                    {news.tag}
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#00000080]">
+                    <div className="absolute top-[16px] left-[16px] bg-black/30 text-white/80 px-2 py-1 rounded backdrop-blur-md border border-white/80 text-sm">
+                      {news.tag}
+                    </div>
                   </div>
                 )}
               </div>
@@ -60,7 +57,12 @@ const TrendingNews = () => {
                 <p className="font-roboto text-[16px] md:text-[14px] xl:text-[16px] text-[#637381] leading-[1.5]">
                   {news.description}
                 </p>
-                <Link href="https://www.multibriefs.com/briefs/NASSORG/NASSORG042425.php" target="_blank" rel="noopener noreferrer" className="font-roboto text-[#0F72F3] text-[14px] md:text-[12px] xl:text-[14px] leading-[1.5] hover:underline">
+                <Link
+                  href="https://www.multibriefs.com/briefs/NASSORG/NASSORG042425.php"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-roboto text-[#0F72F3] text-[14px] md:text-[12px] xl:text-[14px] leading-[1.5] !underline"
+                >
                   Read More
                 </Link>
               </div>
@@ -72,4 +74,4 @@ const TrendingNews = () => {
   );
 };
 
-export default TrendingNews; 
+export default TrendingNews;

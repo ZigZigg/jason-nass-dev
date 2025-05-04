@@ -5,7 +5,7 @@ import StrategicPlanningSponsors from './Sponsors'
 const IntroductionVideo = () => {
   return (
     <div className="flex-1 px-[16px] md:px-[0px] md:w-[60%] xl:w-auto">
-      <h3 className="text-2xl md:text-3xl uppercase text-[#205A93] mb-6 font-semibold">
+      <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold">
         Introduction Video
       </h3>
       
@@ -13,11 +13,12 @@ const IntroductionVideo = () => {
         <div className="relative">
           {/* Video Container */}
           <div className="w-full aspect-video relative">
+            
             <video 
               className="w-full h-full object-cover rounded-t-md"
-              poster="/images/video-thumbnail.jpg"
+              poster="/images/strategic-planning/video-thumb-01.png"
               controls
-              src="https://assetsdev.jason.org/resource_assets/55389/34341/PLAYWATCH_VID_ALPHALetterA.mp4"
+              src="https://assetsdev.jason.org/resource_assets/53727/32788/LEVL_VID_FeelingNinja.mp4"
             />
           </div>
           
@@ -51,8 +52,8 @@ const IntroductionVideo = () => {
       </div>
 
       {/* Key Topic Section */}
-      <h3 className="text-2xl md:text-3xl uppercase text-[#205A93] mb-6 font-semibold mt-8">
-        video KEY TOPIC
+      <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
+        VIDEO KEY TOPIC
       </h3>
       
       <div className="bg-white rounded-md overflow-hidden">
@@ -61,9 +62,9 @@ const IntroductionVideo = () => {
           <div className="w-full aspect-video relative">
             <video 
               className="w-full h-full object-cover rounded-t-md"
-              poster="/images/video-thumbnail-2.jpg"
+              poster="/images/strategic-planning/video-thumb-02.png"
               controls
-              src="https://assetsdev.jason.org/resource_assets/55389/34341/PLAYWATCH_VID_ALPHALetterA.mp4"
+              src="https://assetsdev.jason.org/resource_assets/53727/32788/LEVL_VID_FeelingNinja.mp4"
             />
           </div>
           
@@ -99,7 +100,7 @@ const IntroductionVideo = () => {
       </div>
 
       {/* Monograph Section */}
-      <h3 className="text-2xl md:text-3xl uppercase text-[#205A93] mb-6 font-semibold mt-8">
+      <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
         MONOGRAPH: A SUPERINTENDENT&apos;S APPROACH TO STRATEGIC PLANNING
       </h3>
       

@@ -97,7 +97,7 @@ export default function DashboardPage() {
 
   return (
     <div className="w-full h-full w-full md:w-[720px] xl:w-[1280px] px-[16px] md:px-[0px] py-[24px] mx-auto">
-      <h1 className="text-[#205A93] text-[32px] font-[600] font-oswald text-center uppercase leading-[1.48em]">
+      <h1 className="text-[#205A93] text-[32px] font-[600] font-oswald text-left md:text-center  uppercase leading-[1.48em]">
         Welcome, {session?.user?.fullName}
       </h1>
 
