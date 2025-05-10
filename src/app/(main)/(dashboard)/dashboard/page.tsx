@@ -101,7 +101,7 @@ export default function DashboardPage() {
         Welcome, {session?.user?.fullName}
       </h1>
 
-      <div className="flex flex-col gap-[24px] py-[24px]">
+      <div className="flex flex-col gap-[24px] py-[24px] xl:h-[calc(100vh_-_265px)]">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[24px]">
           {categories.map((category) => (
             <CategoryCard 

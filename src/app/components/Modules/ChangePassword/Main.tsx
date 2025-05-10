@@ -31,7 +31,7 @@ export default function ChangePasswordMain() {
           className="w-full auth-form"
         >
           <p className="uppercase mb-[16px] text-black text-[32px] font-[700] text-center leading-[130%] font-oswald">
-          set new password
+          change password
           </p>
           <p className='w-full text-[16px] text-[#475467] text-center font-[400] font-inter'>Your new password must be different to previously used passwords.</p>
           <Form.Item
@@ -78,11 +78,11 @@ export default function ChangePasswordMain() {
           />
           <Form.Item
             style={{ marginTop: '16px', marginBottom: '32px' }}
-            label="Confirm new password"
+            label="Confirm password"
             name="confirmPassword"
             dependencies={['password']}
             rules={[
-              { required: true, message: 'Please input your confirm new password!' },
+              { required: true, message: 'Please input your confirm password!' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('password') === value) {
@@ -95,7 +95,7 @@ export default function ChangePasswordMain() {
               }),
             ]}
           >
-            <BaseInput type="password" placeholder='Enter confirm new password' />
+            <BaseInput type="password" placeholder='Enter your confirm password' />
           </Form.Item>
 
 
@@ -107,7 +107,7 @@ export default function ChangePasswordMain() {
               block
               className="!bg-[#212B36]"
             >
-              <span className="font-oswald !text-[#fff]">RESET PASSWORD</span>
+              <span className="font-oswald !text-[#fff] uppercase">change password</span>
             </BaseButton>
           </Form.Item>
         </Form>

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export const useUpdateStyle = () => {
    const pathname = usePathname();
-   const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+   const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password', '/change-password'].includes(pathname);
    useEffect(() => {
     if(isAuthPage){
         console.log('isAuthPage', isAuthPage)

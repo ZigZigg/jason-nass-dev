@@ -81,7 +81,7 @@ export default function ResetNewPasswordMain() {
               }),
             ]}
           >
-            <BaseInput type="password" placeholder='Enter confirm password' />
+            <BaseInput type="password" placeholder='Enter your confirm password' />
           </Form.Item>
 
 

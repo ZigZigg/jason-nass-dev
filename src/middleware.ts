@@ -7,10 +7,14 @@ export async function middleware(request: NextRequest) {
 
   const isAuthenticated = !!(token?.accessToken)
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/signup')
-
+  const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
   // if (!isAuthenticated && !isAuthRoute) {
   //   return NextResponse.redirect(new URL('/login', request.url))
   // }
+
+  if(isDashboardRoute && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
   if (isAuthenticated && isAuthRoute) {
     return NextResponse.redirect(new URL('/', request.url))

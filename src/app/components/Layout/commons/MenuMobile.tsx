@@ -1,7 +1,7 @@
 import BaseButton from '@/app/atomics/button/BaseButton';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 interface Props {
@@ -11,16 +11,14 @@ interface Props {
 }
 
 const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => {
-  const pathname = usePathname();
-  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
   const router = useRouter();
   // Define navigation links based on authentication status
   const navLinks = useMemo(() => {
     if (authStatus === 'unauthenticated') {
       return [
-        { href: '/', label: 'About' },
+        { href: 'https://www.nass.us/aboutnass/', label: 'About' },
         { href: 'https://www.nass.us/contact-us', label: 'Contact' },
-        { href: 'https://www.nass.us/benefits', label: 'Help' },
+        { href: 'https://www.nass.us/benefits', label: 'Benefits' },
       ];
     }
     return [
@@ -42,6 +40,7 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
           <Link
             key={`key-${link.label}`}
             href={link.href}
+            target={link.href.includes('http') ? '_blank' : '_self'}
             className="uppercase font-oswald hover:text-gray-300 text-[36px] font-[700] !text-[#fff]"
             onClick={() => setOpenMenuMobile(false)}
           >
@@ -50,7 +49,7 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
         ))}
       </div>
       
-      {!isAuthPage && authStatus === 'unauthenticated' && (
+      {authStatus === 'unauthenticated' && (
         <div id="menu-mobile-buttons" className="flex flex-col gap-[24px]">
           <BaseButton 
             onClick={() => {

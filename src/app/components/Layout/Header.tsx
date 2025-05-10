@@ -16,7 +16,7 @@ const Header = () => {
   const [openMenuMobile, setOpenMenuMobile] = useState(false);
   const [openMenuDesktop, setOpenMenuDesktop] = useState(false);
   const orientation = useOrientation();
-  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password', '/change-password'].includes(pathname);
   // Define navigation links
   const navLinks = useMemo(() => {
     if (isAuthPage) {
@@ -24,15 +24,15 @@ const Header = () => {
     }
     if (status === 'authenticated') {
       return [
-        { href: '/', label: 'Dashboard' },
+        { href: '/dashboard', label: 'Dashboard' },
         { href: '#', label: 'Resources' },
         { href: '#', label: 'Support' },
       ];
     }
     return [
-      { href: '/', label: 'About' },
+      { href: 'https://www.nass.us/aboutnass', label: 'About' },
       { href: 'https://www.nass.us/contact-us', label: 'Contact' },
-      { href: 'https://www.nass.us/benefits', label: 'Help' },
+      { href: 'https://www.nass.us/benefits', label: 'Benefits' },
     ];
   }, [status, isAuthPage]);
 
@@ -69,7 +69,7 @@ const Header = () => {
   }, [orientation]);
 
   const renderRightActions = useCallback(() => {
-    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password', '/change-password'].includes(pathname);
 
     return (
       <div className="flex items-center gap-4">
@@ -178,7 +178,7 @@ const Header = () => {
 
   const pageActions = () => {
     const isAuthPage = ['/login', '/signup'].includes(pathname);
-    const isHomePage = ['/', '/dashboard', '/forgot-password', '/reset-password'].includes(pathname);
+    const isHomePage = ['/', '/dashboard', '/forgot-password', '/reset-password', '/change-password'].includes(pathname);
     if (isHomePage) {
       return null;
     }
@@ -207,6 +207,7 @@ const Header = () => {
               <Link
                 key={`key-${link.label}`}
                 href={link.href}
+                target={link.href.includes('http') ? '_blank' : '_self'}
                 className="uppercase font-oswald hover:text-gray-300 text-[16px] md:text-[12px] xl:text-[16px] font-[400] !text-[#fff]"
               >
                 {link.label}
@@ -219,7 +220,7 @@ const Header = () => {
             className="h-[54px] w-[141px] md:w-[240px] xl:w-[392px] flex items-center justify-center"
           >
             <Image
-              src="/images/main-logo.svg"
+              src="/images/main-logo.png"
               alt="Logo"
               width={392}
               height={54}

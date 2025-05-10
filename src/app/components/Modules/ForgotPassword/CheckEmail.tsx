@@ -86,7 +86,7 @@ export default function CheckEmail({ email }: Props) {
         <span className="text-[14px] text-[#475467]">Didn&apos;t receive the email?</span>
         <span 
           onClick={onResend} 
-          className={`mx-[5px] text-[14px] text-[#475467] font-[700] underline ${countdown > 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          className={`mx-[5px] text-[14px] ${countdown > 0 ? '!text-[#475467]' : 'text-[#205A93]'} font-[700] underline ${countdown > 0 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {`Click to resend ${countdown > 0 ? `(${countdown}s)` : ''}`}
         </span>

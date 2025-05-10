@@ -21,19 +21,21 @@ const UnauthorizedFooter = () => {
         </div>
         <div className="flex flex-col md:flex-row gap-[24px] xl:gap-10">
           <Link
-            href="/about"
+            href="https://www.nass.us/aboutnass"
+            target="_blank"
             className="font-roboto !font-[600] text-[18px] md:text-[16px] xl:text-[18px] !text-[#fff] hover:text-gray-300"
           >
             About Us
           </Link>
           <Link
-            href="/membership"
+            href="#"
             className="font-roboto !font-[600] text-[18px] md:text-[16px] xl:text-[18px] !text-[#fff] hover:text-gray-300"
           >
             Membership
           </Link>
           <Link
-            href="/contact"
+            href="https://www.nass.us/contact-us"
+            target="_blank"
             className="font-roboto !font-[600] text-[18px] md:text-[16px] xl:text-[18px] !text-[#fff] hover:text-gray-300"
           >
             Contact

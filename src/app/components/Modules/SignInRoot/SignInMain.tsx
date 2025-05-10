@@ -96,7 +96,9 @@ export default function SignInMain() {
 
                   // Trim spaces from start and end before checking
                   const trimmedEmail = value.trim();
-
+                  if(trimmedEmail.length === 0) {
+                    return Promise.reject('Please input your email');
+                  }
                   // Check if there are any spaces in the middle
                   if (trimmedEmail.includes(' ')) {
                     return Promise.reject('The input is not valid email!');
@@ -164,7 +166,7 @@ export default function SignInMain() {
         <span className="text-[16px]">Don&apos;t have an account?</span>
         <Link
           style={{ textDecoration: 'underline' }}
-          className="mx-[5px] text-[16px]!"
+          className="mx-[5px] text-[16px]! !text-[#11304E]"
           href="/signup"
         >
           Sign Up

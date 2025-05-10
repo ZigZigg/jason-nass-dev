@@ -73,7 +73,6 @@ export default function SignUpMain() {
             name="name" 
             className='custom-input-label'
             rules={[
-              { required: true, message: 'Please input your name!' },
               {
                 validator: (_, value) => {
                   if (!value || value.trim() === '') {
@@ -98,6 +97,10 @@ export default function SignUpMain() {
 
                   // Trim spaces from start and end before checking
                   const trimmedEmail = value.trim();
+
+                  if(trimmedEmail.length === 0) {
+                    return Promise.reject('Please input your email');
+                  }
 
                   // Check if there are any spaces in the middle
                   if (trimmedEmail.includes(' ')) {
@@ -164,7 +167,7 @@ export default function SignUpMain() {
               }),
             ]}
           >
-            <BaseInput type="password" placeholder='Enter your password' />
+            <BaseInput type="password" placeholder='Enter your confirm password' />
           </Form.Item>
 
           <Form.Item style={{ marginBottom: '0px' }}>
@@ -185,7 +188,7 @@ export default function SignUpMain() {
       </div>
       <div className="mt-[24px] flex justify-center items-center">
         <span className="text-[16px]">Already have an account?</span>
-        <Link style={{ textDecoration: 'underline' }} className="mx-[5px] text-[16px]!" href="/login">
+        <Link style={{ textDecoration: 'underline' }} className="mx-[5px] text-[16px]! !text-[#11304E]" href="/login">
           Log In
         </Link>
       </div>

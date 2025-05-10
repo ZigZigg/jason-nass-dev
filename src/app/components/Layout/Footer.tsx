@@ -14,7 +14,7 @@ const Footer = () => {
         <div
           id="action-footer"
           className={`py-6 px-4 md:px-8 ${
-            isAuthPage ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
+            isAuthPage || ['/change-password'].includes(pathname) ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
           }`}
         >
           <div className="container mx-auto w-full md:w-[720px] xl:w-[1280px] flex flex-col md:flex-row justify-between items-center gap-[32px]">

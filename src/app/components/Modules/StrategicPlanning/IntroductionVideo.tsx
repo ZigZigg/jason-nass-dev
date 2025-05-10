@@ -43,7 +43,7 @@ const IntroductionVideo = () => {
               <p className="text-base text-[#637381] mb-2">
                 &ldquo;Strategic planning isn&apos;t just about setting goals—it&apos;s about creating a roadmap for meaningful, lasting impact.&rdquo;
               </p>
-              <span className="text-sm text-[#0F72F3] cursor-pointer hover:underline">
+              <span className="text-sm text-[#0F72F3] cursor-pointer underline">
                 Show Detail
               </span>
             </div>
@@ -114,7 +114,7 @@ const IntroductionVideo = () => {
           <span className="block pl-6">• Ensuring community and staff buy-in</span>
         </p>
         
-        <a href="/files/sample_doc.docx" download className="inline-block w-full md:w-fit">
+        <a href="/files/Book recommendation.docx" download className="inline-block w-full md:w-fit">
           <div className="flex items-center gap-2 p-[10px_14px] bg-white border border-[#EAECF0] rounded-tr-lg rounded-br-lg rounded-bl-lg justify-between md:justify-start">
             <div className="flex items-center gap-2">
             <div className="relative w-8 h-8">
@@ -123,7 +123,7 @@ const IntroductionVideo = () => {
             </div>
             
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-[#344054]">Book recommendations.docx</span>
+              <span className="text-sm font-medium text-[#344054]">Book recommendation.docx</span>
               <span className="text-sm text-[#475467]">1.2 MB</span>
             </div>
             </div>
