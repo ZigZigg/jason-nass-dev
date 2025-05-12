@@ -177,20 +177,21 @@ const Header = () => {
   }, []);
 
   const pageActions = () => {
-    const isAuthPage = ['/login', '/signup'].includes(pathname);
-    const isHomePage = ['/', '/dashboard', '/forgot-password', '/reset-password', '/change-password'].includes(pathname);
+    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+    const isTransparentPage = ['/change-password'].includes(pathname);
+    const isHomePage = ['/', '/dashboard'].includes(pathname);
     if (isHomePage) {
       return null;
     }
     return (
       <div
         className={`flex flex-row h-[70px] flex md:hidden w-full px-[16px] md:px-[0px] ${
-          isAuthPage ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
+          (isAuthPage || isTransparentPage) ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
         }`}
       >
         <div className="flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link href="/" className="font-roboto text-[14px] text-[#212B36] hover:underline">
+          <Link href={isAuthPage ? '/dashboard' : '/'} className="font-roboto text-[14px] text-[#212B36] hover:underline">
             {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
           </Link>
         </div>

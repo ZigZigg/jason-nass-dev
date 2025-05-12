@@ -27,12 +27,11 @@ const UnauthorizedFooter = () => {
           >
             About Us
           </Link>
-          <Link
-            href="#"
-            className="font-roboto !font-[600] text-[18px] md:text-[16px] xl:text-[18px] !text-[#fff] hover:text-gray-300"
+          <span
+            className="cursor-pointer font-roboto !font-[600] text-[18px] md:text-[16px] xl:text-[18px] !text-[#fff] hover:text-gray-300"
           >
             Membership
-          </Link>
+          </span>
           <Link
             href="https://www.nass.us/contact-us"
             target="_blank"

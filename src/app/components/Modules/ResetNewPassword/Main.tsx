@@ -102,7 +102,7 @@ export default function ResetNewPasswordMain() {
 
   return (
     <div
-      className={`mt-[56px] md:mt-[0px] w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F4F9FF] pb-[74px] md:pb-[0px]`}
+      className={`md:mt-[0px] w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F4F9FF] pb-[74px] md:pb-[0px]`}
     >
       <div className="flex flex-col justify-center items-center w-full h-fit md:w-[420px] p-[20px] md:p-[40px] bg-white rounded-[16px]"> 
         {isSuccess ? <ResetNewPasswordSuccess /> : mainForm()}

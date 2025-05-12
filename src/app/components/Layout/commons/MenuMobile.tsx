@@ -27,11 +27,11 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
       { href: '#', label: 'Support' },
     ];
   }, [authStatus]);
-  
+
   const onSignOut = () => {
     setOpenMenuMobile(false);
     handleSignOut();
-  }
+  };
 
   return (
     <div className="w-[100%] py-[40px] px-[16px]">
@@ -48,41 +48,51 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
           </Link>
         ))}
       </div>
-      
+
       {authStatus === 'unauthenticated' && (
         <div id="menu-mobile-buttons" className="flex flex-col gap-[24px]">
-          <BaseButton 
+          <BaseButton
             onClick={() => {
               setOpenMenuMobile(false);
               window.location.href = '/signup';
-            }} 
-            className="!bg-[#F2DF0A] h-auto !py-[8px]" 
+            }}
+            className="!bg-[#F2DF0A] h-auto !py-[8px]"
             size="large"
           >
             <span className="text-[#212B36] text-[16px] font-[500] font-oswald">SIGN UP</span>
           </BaseButton>
-          <BaseButton 
+          <BaseButton
             onClick={() => {
               setOpenMenuMobile(false);
               window.location.href = '/login';
-            }} 
-            className="bg-transparent h-auto !py-[8px]" 
+            }}
+            className="bg-transparent h-auto !py-[8px]"
             size="large"
           >
             <span className="text-[#212B36] text-[16px] font-[500] font-oswald">LOG IN</span>
           </BaseButton>
         </div>
       )}
-      
+
       {authStatus === 'authenticated' && (
         <div id="menu-mobile-buttons" className="flex flex-col gap-[16px]">
-          <div className='flex flex-row items-center py-[8px] gap-[24px]' onClick={() => {router.push('/change-password')}}>
-            <Image src='/images/icons/user-white.svg' alt='user' width={24} height={24} />
-            <span className='text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]'>Account Settings</span>
+          <div
+            className="flex flex-row items-center py-[8px] gap-[24px]"
+            onClick={() => {
+              setOpenMenuMobile(false);
+              router.push('/change-password');
+            }}
+          >
+            <Image src="/images/icons/user-white.svg" alt="user" width={24} height={24} />
+            <span className="text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]">
+              Account Settings
+            </span>
           </div>
-          <div onClick={onSignOut} className='flex flex-row items-center py-[8px] gap-[24px]'>
-            <Image src='/images/icons/log-out-white.svg' alt='user' width={24} height={24} />
-            <span className='text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]'>Log Out</span>
+          <div onClick={onSignOut} className="flex flex-row items-center py-[8px] gap-[24px]">
+            <Image src="/images/icons/log-out-white.svg" alt="user" width={24} height={24} />
+            <span className="text-[#fff] text-[24px] font-[500] font-roboto leading-[100%]">
+              Log Out
+            </span>
           </div>
         </div>
       )}

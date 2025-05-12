@@ -13,7 +13,7 @@ const StrategicPlanningPage = () => {
       >
         <div className="flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link href="/" className="font-roboto text-[14px] text-[#212B36] hover:underline">
+          <Link href="/dashboard" className="font-roboto text-[14px] text-[#212B36] hover:underline">
             Back to Dashboard
           </Link>
         </div>

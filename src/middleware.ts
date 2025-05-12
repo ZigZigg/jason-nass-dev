@@ -6,13 +6,17 @@ export async function middleware(request: NextRequest) {
   const token:any = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
   const isAuthenticated = !!(token?.accessToken)
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/signup')
-  const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
+  const isAuthRoute = ['/login', '/signup'].some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  )
+  const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password'].some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  )
   // if (!isAuthenticated && !isAuthRoute) {
   //   return NextResponse.redirect(new URL('/login', request.url))
   // }
 
-  if(isDashboardRoute && !isAuthenticated) {
+  if(isPrivateRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 

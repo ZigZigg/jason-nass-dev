@@ -70,7 +70,8 @@ export default function SignUpMain() {
           <Form.Item
             style={{ marginTop: '16px', marginBottom: '16px' }}
             label="Name"
-            name="name" 
+            name="name"
+            required={true}
             className='custom-input-label'
             rules={[
               {
@@ -99,7 +100,7 @@ export default function SignUpMain() {
                   const trimmedEmail = value.trim();
 
                   if(trimmedEmail.length === 0) {
-                    return Promise.reject('Please input your email');
+                    return Promise.reject('Please input your email!');
                   }
 
                   // Check if there are any spaces in the middle

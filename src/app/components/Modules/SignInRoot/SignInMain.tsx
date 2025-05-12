@@ -97,7 +97,7 @@ export default function SignInMain() {
                   // Trim spaces from start and end before checking
                   const trimmedEmail = value.trim();
                   if(trimmedEmail.length === 0) {
-                    return Promise.reject('Please input your email');
+                    return Promise.reject('Please input your email!');
                   }
                   // Check if there are any spaces in the middle
                   if (trimmedEmail.includes(' ')) {
