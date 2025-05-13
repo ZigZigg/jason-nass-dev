@@ -59,7 +59,7 @@ const Header = () => {
     },
   ];
   const handleSignOut = async () => {
-    await signOut({ redirect: true }); // Sign out without redirecting
+    await signOut({ redirect: false }); // Sign out without redirecting
     setTimeout(() => {
       router.push('/'); // Redirect to the login page after signing out
     }, 500);
