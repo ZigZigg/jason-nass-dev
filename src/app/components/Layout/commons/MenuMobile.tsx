@@ -22,7 +22,7 @@ const MenuMobile = ({ authStatus, handleSignOut, setOpenMenuMobile }: Props) => 
       ];
     }
     return [
-      { href: '/', label: 'Dashboard' },
+      { href: '/dashboard', label: 'Dashboard' },
       { href: '#', label: 'Resources' },
       { href: '#', label: 'Support' },
     ];
