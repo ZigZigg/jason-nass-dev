@@ -31,7 +31,7 @@ const Footer = () => {
                   height={24}
                 />
                 <Link
-                  href={isAuthPage ? '/dashboard' : '/'}
+                  href={isAuthPage ? '/' : '/dashboard'}
                   className="font-roboto text-[14px] text-[#212B36] hover:underline"
                 >
                   {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}

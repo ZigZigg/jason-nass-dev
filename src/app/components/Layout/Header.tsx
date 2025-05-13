@@ -59,8 +59,10 @@ const Header = () => {
     },
   ];
   const handleSignOut = async () => {
-    await signOut({ redirect: false }); // Sign out without redirecting
-    router.push('/'); // Redirect to the login page after signing out
+    await signOut({ redirect: true }); // Sign out without redirecting
+    setTimeout(() => {
+      router.push('/'); // Redirect to the login page after signing out
+    }, 500);
   };
 
   useEffect(() => {
@@ -191,7 +193,7 @@ const Header = () => {
       >
         <div className="flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link href={isAuthPage ? '/dashboard' : '/'} className="font-roboto text-[14px] text-[#212B36] hover:underline">
+          <Link href={isAuthPage ? '/' : '/dashboard'} className="font-roboto text-[14px] text-[#212B36] hover:underline">
             {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
           </Link>
         </div>

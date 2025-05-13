@@ -3,32 +3,39 @@ import type { NextRequest } from 'next/server'
 import { getToken } from "next-auth/jwt";
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-  const token:any = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET 
+  });
 
-  const isAuthenticated = !!(token?.accessToken)
+  // Check if user is authenticated (has valid token)
+  const isAuthenticated = !!token;
+  
+  // Define auth routes (public) and private routes
   const isAuthRoute = ['/login', '/signup'].some(route => 
     request.nextUrl.pathname.startsWith(route)
-  )
+  );
+  
   const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password'].some(route => 
     request.nextUrl.pathname.startsWith(route)
-  )
-  // if (!isAuthenticated && !isAuthRoute) {
-  //   return NextResponse.redirect(new URL('/login', request.url))
-  // }
+  );
 
-  if(isPrivateRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.url))
+  // If trying to access private route without authentication
+  if (isPrivateRoute && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
+  // If authenticated user tries to access auth routes (login/signup)
   if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
+  // If authenticated user accesses the root path
   if (isAuthenticated && request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
