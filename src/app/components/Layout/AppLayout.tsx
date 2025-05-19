@@ -5,10 +5,10 @@ import Footer from './Footer';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-      <div>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow">{children}</main>
+      <Footer />
+    </div>
   );
 }
