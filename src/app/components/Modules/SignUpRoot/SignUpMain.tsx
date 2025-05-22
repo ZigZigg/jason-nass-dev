@@ -9,11 +9,9 @@ import { IconType } from 'antd/es/notification/interface';
 
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 
 export default function SignUpMain() {
-  const router = useRouter();
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
   const { update, status } = useSession();
@@ -33,7 +31,7 @@ export default function SignUpMain() {
     if(status === 'authenticated'){
       setTimeout(() => {
         setIsLoading(false)
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }, 1000);
     }
   }, [status]);

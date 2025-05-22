@@ -4,7 +4,6 @@ import BaseButton from '@/app/atomics/button/BaseButton';
 import BaseInput from '@/app/atomics/input/BaseInput';
 import { Form, message, Checkbox } from 'antd';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 // import { useDispatch } from "react-redux";
 import Link from 'next/link';
 import { useContext, useState, useEffect } from 'react';
@@ -13,7 +12,6 @@ import { IconType } from 'antd/es/notification/interface';
 import { useUpdateStyle } from '@/app/hooks/useUpdateStyle';
 
 export default function SignInMain() {
-  const router = useRouter();
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
@@ -33,7 +31,7 @@ export default function SignInMain() {
     if(status === 'authenticated'){
       setTimeout(() => {
         setIsLoading(false)
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }, 1000);
     }
   }, [status]);
