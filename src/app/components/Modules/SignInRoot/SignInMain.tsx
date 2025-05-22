@@ -18,6 +18,7 @@ export default function SignInMain() {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const { update, status } = useSession();
+  console.log("🚀 ~ SignInMain ~ status:", status)
 
   useUpdateStyle();
   useEffect(() => {
