@@ -7,16 +7,16 @@ import { useUpdateStyle } from '@/app/hooks/useUpdateStyle';
 import { Form, message } from 'antd';
 import { IconType } from 'antd/es/notification/interface';
 
-import { signIn, useSession, getSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 export default function SignUpMain() {
   const router = useRouter();
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
-  const { update } = useSession();
+  const { update, status } = useSession();
   useUpdateStyle()
   const onNotification = (description: string, type: IconType = 'error') => {
     api!.open({
@@ -28,6 +28,15 @@ export default function SignUpMain() {
     });
   };
   // const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(status === 'authenticated'){
+      setTimeout(() => {
+        setIsLoading(false)
+        router.push('/dashboard');
+      }, 1000);
+    }
+  }, [status]);
 
   const onFinish = async (values: any) => {
     setIsLoading(true);
@@ -50,39 +59,6 @@ export default function SignUpMain() {
         // Update the session to ensure it reflects the latest authentication state
         await update();
         
-        // Check if the user is authenticated before redirecting
-        let retryCount = 0;
-        const maxRetries = 10; // Maximum number of retry attempts
-        
-        const checkAuthAndRedirect = async () => {
-          // Get fresh session state instead of using stale closure value
-          const session = await getSession();
-          const isAuthenticated = !!session;
-          
-          
-          // If authenticated, redirect to dashboard
-          if (isAuthenticated) {
-            message.success('SignUp successful!');
-            router.push('/dashboard');
-            return;
-          }
-          
-          // Increment retry counter
-          retryCount++;
-          
-          // If we've reached max retries, show error
-          if (retryCount >= maxRetries) {
-            onNotification('Authentication timed out. Please try again.', 'error');
-            setIsLoading(false);
-            return;
-          }
-          
-          // If not authenticated yet, try checking again after a delay
-          const delay = Math.min(100 * retryCount, 1000); // Start with 100ms, cap at 1000ms
-          setTimeout(checkAuthAndRedirect, delay);
-        };
-        
-        checkAuthAndRedirect();
       }
     } catch (error) {
       console.error('SignUp error:', error);
