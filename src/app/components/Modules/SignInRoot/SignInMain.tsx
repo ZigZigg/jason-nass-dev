@@ -3,7 +3,7 @@
 import BaseButton from '@/app/atomics/button/BaseButton';
 import BaseInput from '@/app/atomics/input/BaseInput';
 import { Form, message, Checkbox } from 'antd';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 // import { useDispatch } from "react-redux";
 import Link from 'next/link';
@@ -17,6 +17,8 @@ export default function SignInMain() {
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+  const { status, update } = useSession();
+  console.log("🚀 ~ SignInMain ~ status:", status)
   useUpdateStyle();
   useEffect(() => {
     // Load saved email if exists
@@ -48,6 +50,7 @@ export default function SignInMain() {
 
       if (result?.error) {
         onNotification(result?.error, 'error');
+        setIsLoading(false);
       } else {
         // Save or remove email based on remember choice
         if (values.remember) {
@@ -55,18 +58,48 @@ export default function SignInMain() {
         } else {
           localStorage.removeItem('rememberedEmail');
         }
-
-        message.success('Login successful!');
         
-        // Add slight delay to ensure token is properly set before navigation
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 500);
+        // Update the session to ensure it reflects the latest authentication state
+        await update();
+        
+        // Check if the user is authenticated before redirecting
+        let retryCount = 0;
+        const maxRetries = 10; // Maximum number of retry attempts
+        
+        const checkAuthAndRedirect = async () => {
+          // Get fresh session state instead of using stale closure value
+          const session = await getSession();
+          const isAuthenticated = !!session;
+          
+          
+          // If authenticated, redirect to dashboard
+          if (isAuthenticated) {
+            message.success('Login successful!');
+            router.push('/dashboard');
+            return;
+          }
+          
+          // Increment retry counter
+          retryCount++;
+          
+          // If we've reached max retries, show error
+          if (retryCount >= maxRetries) {
+            onNotification('Authentication timed out. Please try again.', 'error');
+            setIsLoading(false);
+            return;
+          }
+          
+          // If not authenticated yet, try checking again after a delay
+          // Add progressive delay between retries
+          const delay = Math.min(100 * retryCount, 1000); // Start with 100ms, cap at 1000ms
+          setTimeout(checkAuthAndRedirect, delay);
+        };
+        
+        checkAuthAndRedirect();
       }
     } catch (error) {
       console.error('Login error:', error);
       message.error('An error occurred. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   };
