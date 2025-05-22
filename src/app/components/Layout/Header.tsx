@@ -59,10 +59,50 @@ const Header = () => {
     },
   ];
   const handleSignOut = async () => {
-    await signOut({ redirect: false }); // Sign out without redirecting
-    setTimeout(() => {
-      router.push('/'); // Redirect to the login page after signing out
-    }, 500);
+    try {
+      // Attempt to sign out
+      await signOut({ redirect: false });
+      
+      // Check both cookie and localStorage for session tokens
+      const checkSession = () => {
+        const cookieCleared = document.cookie.indexOf('next-auth.session-token') === -1 &&
+                             document.cookie.indexOf('__Secure-next-auth.session-token') === -1;
+        
+        const localStorageCleared = !window.localStorage.getItem('next-auth.session-token') &&
+                                   !window.localStorage.getItem('next-auth.callback-url');
+        
+        if (cookieCleared && localStorageCleared) {
+          // Session is fully cleared, safe to redirect
+          router.push('/');
+        } else {
+          // Manually clear any remaining tokens
+          window.localStorage.removeItem('next-auth.session-token');
+          window.localStorage.removeItem('next-auth.callback-url');
+          window.localStorage.removeItem('next-auth.csrf-token');
+          
+          // Try again, but limit retries
+          if (retryCount < 5) {
+            setTimeout(() => checkSession(), 100);
+            retryCount++;
+          } else {
+            // Fallback: force redirect after max retries
+            console.warn('Session cleanup taking longer than expected, forcing redirect');
+            router.push('/');
+          }
+        }
+      };
+      
+      let retryCount = 0;
+      checkSession();
+      
+    } catch (error) {
+      console.error('Sign out error:', error);
+      // Fallback in case of sign out errors
+      window.localStorage.removeItem('next-auth.session-token');
+      window.localStorage.removeItem('next-auth.callback-url');
+      window.localStorage.removeItem('next-auth.csrf-token');
+      router.push('/');
+    }
   };
 
   useEffect(() => {
