@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -8,11 +8,16 @@ import { useSession } from 'next-auth/react';
 
 export default function NotFound() {
   const { status } = useSession();
-  console.log('🚀 ~ NotFound ~ status:', status);
-  const isAuthenticated = status === 'authenticated';
 
+  const isAuthenticated = status === 'authenticated';
+  useEffect(() => {
+  const actionFooter = document.getElementById('action-footer');
+  if (actionFooter) {
+    actionFooter.style.backgroundColor = '#F4F9FF';
+  }
+  }, []);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-[#F4F9FF] flex flex-col items-center justify-center px-4 py-16">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-sm p-8 flex flex-col items-center">
         {/* 404 Image */}
         <div className="mb-12">

@@ -2,10 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import UnauthorizedFooter from './commons/UnauthorizedFooter';
+import { useSession } from 'next-auth/react';
 
 const Footer = () => {
   const pathname = usePathname();
-  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+  const { status } = useSession();
+  const isAuthPage = status === 'authenticated';
   const isDashboardPage = pathname === '/';
   const isAuthDashboardPage = pathname === '/dashboard';
   return (
@@ -14,7 +16,7 @@ const Footer = () => {
         <div
           id="action-footer"
           className={`py-6 px-4 md:px-8 ${
-            isAuthPage || ['/change-password'].includes(pathname) ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
+            !isAuthPage || ['/change-password'].includes(pathname) ? 'bg-[#F4F9FF]' : 'bg-[#fff]'
           }`}
         >
           <div className="container mx-auto w-full md:w-[720px] xl:w-[1280px] flex flex-col md:flex-row justify-between items-center gap-[32px]">
@@ -24,18 +26,23 @@ const Footer = () => {
               </span>
             ) : (
               <div className="flex items-center gap-1 mb-4 md:mb-0 hidden md:flex">
-                <Image
+                {
+                  status !== 'loading' && (<>
+                                  <Image
                   src="/images/icons/arrow-back-grey.svg"
                   alt="arrow-back"
                   width={24}
                   height={24}
                 />
                 <Link
-                  href={isAuthPage ? '/' : '/dashboard'}
+                  href={!isAuthPage ? '/' : '/dashboard'}
                   className="font-roboto text-[14px] text-[#212B36] hover:underline"
                 >
-                  {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
+                  {!isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
                 </Link>
+                  </>)
+                }
+
               </div>
             )}
 
