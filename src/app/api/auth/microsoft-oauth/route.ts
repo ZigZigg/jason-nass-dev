@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     // Microsoft OAuth 2.0 authorization endpoint - use 'common' for multi-tenant
-    const microsoftAuthUrl = new URL('https://login.microsoftonline.com/75be766d-44ff-466f-b923-8da541f5d331/oauth2/v2.0/authorize');
+    const microsoftAuthUrl = new URL(`https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID}/oauth2/v2.0/authorize`);
     
     // Generate state for CSRF protection
     const state = generateState();

@@ -4,8 +4,9 @@ import BaseButton from '@/app/atomics/button/BaseButton';
 import BaseInput from '@/app/atomics/input/BaseInput';
 import NotificationContext from '@/app/context/NotificationContext';
 import { useUpdateStyle } from '@/app/hooks/useUpdateStyle';
-import { Form, message } from 'antd';
+import { Form, message, Divider } from 'antd';
 import { IconType } from 'antd/es/notification/interface';
+import Image from 'next/image';
 
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -84,6 +85,50 @@ export default function SignUpMain() {
       console.error('SignUp error:', error);
       onNotification(error.message || 'An error occurred. Please try again.', 'error');
     } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMicrosoftLogin = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get Microsoft OAuth URL from our API
+      const response = await fetch('/api/auth/microsoft-oauth');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get Microsoft OAuth URL');
+      }
+      
+      // Redirect directly to Microsoft OAuth
+      window.location.href = data.authUrl;
+      
+    } catch (error: any) {
+      console.error('Microsoft login error:', error);
+      onNotification('Microsoft login failed. Please try again.', 'error');
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get Google OAuth URL from our API
+      const response = await fetch('/api/auth/google-oauth');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get Google OAuth URL');
+      }
+      
+      // Redirect directly to Google OAuth
+      window.location.href = data.authUrl;
+      
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      onNotification('Google login failed. Please try again.', 'error');
       setIsLoading(false);
     }
   };
@@ -218,6 +263,42 @@ export default function SignUpMain() {
             </BaseButton>
           </Form.Item>
         </Form>
+
+        <Divider className="!my-6">
+          <span className="text-gray-500 text-sm">OR</span>
+        </Divider>
+
+        <BaseButton
+          onClick={handleMicrosoftLogin}
+          loading={isLoading}
+          type="default"
+          block
+          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3 mb-3"
+        >
+          <Image
+            src="/images/icons/microsoft.svg"
+            alt="Microsoft"
+            width={20}
+            height={20}
+          />
+          <span className="text-gray-700 font-medium">Continue with Microsoft</span>
+        </BaseButton>
+
+        <BaseButton
+          onClick={handleGoogleLogin}
+          loading={isLoading}
+          type="default"
+          block
+          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3"
+        >
+          <Image
+            src="/images/icons/google.svg"
+            alt="Google"
+            width={20}
+            height={20}
+          />
+          <span className="text-gray-700 font-medium">Continue with Google</span>
+        </BaseButton>
       </div>
       <div className="mt-[24px] flex justify-center items-center">
         <span className="text-[16px]">Already have an account?</span>

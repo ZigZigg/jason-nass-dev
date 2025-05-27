@@ -3,9 +3,9 @@ import {
   CognitoIdentityProviderClient, 
   AdminCreateUserCommand,
   AdminGetUserCommand,
-  MessageActionType,
+  AdminAddUserToGroupCommand,
   AdminSetUserPasswordCommand,
-  AdminAddUserToGroupCommand
+  MessageActionType
 } from '@aws-sdk/client-cognito-identity-provider';
 import { generateRandomPassword } from '@/app/lib/password-utils';
 
@@ -17,7 +17,7 @@ const cognitoClient = new CognitoIdentityProviderClient({
   },
 });
 
-interface MicrosoftTokenResponse {
+interface GoogleTokenResponse {
   access_token: string;
   id_token: string;
   token_type: string;
@@ -26,13 +26,15 @@ interface MicrosoftTokenResponse {
   refresh_token?: string;
 }
 
-interface MicrosoftUserInfo {
+interface GoogleUserInfo {
   id: string;
-  displayName: string;
-  givenName: string;
-  surname: string;
-  userPrincipalName: string;
-  mail: string;
+  email: string;
+  verified_email: boolean;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  locale: string;
 }
 
 export async function GET(request: NextRequest) {
@@ -43,8 +45,8 @@ export async function GET(request: NextRequest) {
     const error = searchParams.get('error');
 
     if (error) {
-      console.error('Microsoft OAuth error:', error);
-      return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login?error=microsoft_oauth_error`);
+      console.error('Google OAuth error:', error);
+      return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login?error=google_oauth_error`);
     }
 
     if (!code) {
@@ -60,38 +62,37 @@ export async function GET(request: NextRequest) {
     // Exchange authorization code for tokens
     const tokenResponse = await exchangeCodeForTokens(code);
     
-    // Get user info from Microsoft Graph API
-    const userInfo = await getMicrosoftUserInfo(tokenResponse.access_token);
+    // Get user info from Google API
+    const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
     
     // Create or update user in Cognito
     const cognitoUser = await createOrUpdateCognitoUser(userInfo);
     
     // Create a temporary token for NextAuth session creation
     const sessionToken = Buffer.from(JSON.stringify({
-      microsoftTokens: tokenResponse,
+      googleTokens: tokenResponse,
       userInfo: userInfo,
       cognitoUser: cognitoUser
     })).toString('base64');
 
     // Redirect to a page that will handle NextAuth session creation
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/api/auth/microsoft-session?token=${sessionToken}`);
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/api/auth/google-session?token=${sessionToken}`);
     
   } catch (error) {
-    console.error('Microsoft callback error:', error);
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login?error=microsoft_callback_error`);
+    console.error('Google callback error:', error);
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login?error=google_callback_error`);
   }
 }
 
-async function exchangeCodeForTokens(code: string): Promise<MicrosoftTokenResponse> {
-  const tokenEndpoint = `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID}/oauth2/v2.0/token`;
+async function exchangeCodeForTokens(code: string): Promise<GoogleTokenResponse> {
+  const tokenEndpoint = 'https://oauth2.googleapis.com/token';
   
   const body = new URLSearchParams({
-    client_id: process.env.MICROSOFT_CLIENT_ID!,
-    client_secret: process.env.MICROSOFT_CLIENT_SECRET!,
+    client_id: process.env.GOOGLE_CLIENT_ID!,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET!,
     code: code,
     grant_type: 'authorization_code',
-    redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/microsoft-callback`,
-    scope: 'openid email profile User.Read'
+    redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/google-callback`,
   });
 
   const response = await fetch(tokenEndpoint, {
@@ -110,8 +111,8 @@ async function exchangeCodeForTokens(code: string): Promise<MicrosoftTokenRespon
   return await response.json();
 }
 
-async function getMicrosoftUserInfo(accessToken: string): Promise<MicrosoftUserInfo> {
-  const response = await fetch('https://graph.microsoft.com/v1.0/me', {
+async function getGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
+  const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
@@ -119,14 +120,14 @@ async function getMicrosoftUserInfo(accessToken: string): Promise<MicrosoftUserI
   });
 
   if (!response.ok) {
-    throw new Error('Failed to get user info from Microsoft Graph');
+    throw new Error('Failed to get user info from Google API');
   }
 
   return await response.json();
 }
 
-async function createOrUpdateCognitoUser(userInfo: MicrosoftUserInfo) {
-  const email = userInfo.mail || userInfo.userPrincipalName;
+async function createOrUpdateCognitoUser(userInfo: GoogleUserInfo) {
+  const email = userInfo.email;
   
   try {
     // Try to get existing user
@@ -141,14 +142,14 @@ async function createOrUpdateCognitoUser(userInfo: MicrosoftUserInfo) {
     
   } catch (error: any) {
     if (error.name === 'UserNotFoundException') {
-      // Create new user
+      // Create new user with external provider confirmation
       const createUserCommand = new AdminCreateUserCommand({
         UserPoolId: process.env.COGNITO_USER_POOL_ID!,
         Username: email,
         UserAttributes: [
           { Name: 'email', Value: email },
-          { Name: 'email_verified', Value: 'true' },
-          { Name: 'name', Value: userInfo.displayName },
+          { Name: 'email_verified', Value: 'true' }, // Google has verified the email
+          { Name: 'name', Value: userInfo.name },
         ],
         MessageAction: MessageActionType.SUPPRESS, // Don't send welcome email
         TemporaryPassword: generateRandomPassword(),
@@ -156,20 +157,20 @@ async function createOrUpdateCognitoUser(userInfo: MicrosoftUserInfo) {
 
       const newUser = await cognitoClient.send(createUserCommand);
       
-      // Explicitly confirm the user (sets UserStatus to CONFIRMED)
-      const confirmUserCommand = new AdminSetUserPasswordCommand({
+      // Set permanent password (user won't use this, but Cognito requires it)
+      const setPasswordCommand = new AdminSetUserPasswordCommand({
         UserPoolId: process.env.COGNITO_USER_POOL_ID!,
         Username: email,
         Password: generateRandomPassword(),
         Permanent: true,
       });
       
-      await cognitoClient.send(confirmUserCommand);
+      await cognitoClient.send(setPasswordCommand);
       
       // Add user to groups
       await assignUserToGroups(email);
       
-      console.log('Created new Cognito user:', newUser.User?.Username);
+      console.log('Created and confirmed new Cognito user via Google:', newUser.User?.Username);
       return newUser.User;
     }
     
@@ -180,16 +181,14 @@ async function createOrUpdateCognitoUser(userInfo: MicrosoftUserInfo) {
 // Function to handle group assignment
 async function assignUserToGroups(username: string) {
   try {
-    // Determine which group(s) to assign based on business logic
-    
     const addToGroupCommand = new AdminAddUserToGroupCommand({
       UserPoolId: process.env.COGNITO_USER_POOL_ID!,
       Username: username,
-      GroupName: process.env.MICROSOFT_GROUP!,
+      GroupName: process.env.GOOGLE_GROUP!,
     });
     
     await cognitoClient.send(addToGroupCommand);
-    console.log(`Added user ${username} to group: ap-southeast-1_tCICVsRRZ_jscogtestid`);
+    console.log(`Added user ${username} to group: ${process.env.GOOGLE_GROUP!}`);
   } catch (error) {
     console.error('Error adding user to groups:', error);
     // Don't throw error - user creation should still succeed even if group assignment fails

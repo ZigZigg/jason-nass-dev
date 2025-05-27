@@ -124,6 +124,28 @@ export default function SignInMain() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get Google OAuth URL from our API
+      const response = await fetch('/api/auth/google-oauth');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get Google OAuth URL');
+      }
+      
+      // Redirect directly to Google OAuth
+      window.location.href = data.authUrl;
+      
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      onNotification('Google login failed. Please try again.', 'error');
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
       className={`w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F4F9FF] pb-[40px] md:pb-[0px]`}
@@ -228,7 +250,7 @@ export default function SignInMain() {
           loading={isLoading}
           type="default"
           block
-          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3"
+          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3 mb-3"
         >
           <Image
             src="/images/icons/microsoft.svg"
@@ -237,6 +259,22 @@ export default function SignInMain() {
             height={20}
           />
           <span className="text-gray-700 font-medium">Continue with Microsoft</span>
+        </BaseButton>
+
+        <BaseButton
+          onClick={handleGoogleLogin}
+          loading={isLoading}
+          type="default"
+          block
+          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3"
+        >
+          <Image
+            src="/images/icons/google.svg"
+            alt="Google"
+            width={20}
+            height={20}
+          />
+          <span className="text-gray-700 font-medium">Continue with Google</span>
         </BaseButton>
       </div>
       <div className="mt-[24px] flex justify-center items-center">
