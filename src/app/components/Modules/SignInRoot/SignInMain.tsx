@@ -2,7 +2,7 @@
 
 import BaseButton from '@/app/atomics/button/BaseButton';
 import BaseInput from '@/app/atomics/input/BaseInput';
-import { Form, message, Checkbox } from 'antd';
+import { Form, message, Checkbox, Divider } from 'antd';
 import { signIn, useSession } from 'next-auth/react';
 // import { useDispatch } from "react-redux";
 import Link from 'next/link';
@@ -10,15 +10,16 @@ import { useContext, useState, useEffect } from 'react';
 import NotificationContext from '@/app/context/NotificationContext';
 import { IconType } from 'antd/es/notification/interface';
 import { useUpdateStyle } from '@/app/hooks/useUpdateStyle';
+import Image from 'next/image';
 
 export default function SignInMain() {
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
-  const { update, status } = useSession();
-  console.log("🚀 ~ SignInMain ~ status:", status)
-
+  const { status } = useSession();
+  
   useUpdateStyle();
+  
   useEffect(() => {
     // Load saved email if exists
     const savedEmail = localStorage.getItem('rememberedEmail');
@@ -45,35 +46,80 @@ export default function SignInMain() {
       type: type,
     });
   };
-  // const dispatch = useDispatch();
 
   const onFinish = async (values: any) => {
     setIsLoading(true);
     try {
-      const result = await signIn('login', {
-        redirect: false,
-        ...values,
-        email: values.email.trim(), // Trim spaces from the email
+      // Save or remove email based on remember choice
+      if (values.remember) {
+        localStorage.setItem('rememberedEmail', values.email.trim());
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+      console.log("🚀 ~ onFinish ~ values:", values)
+      // Use custom Cognito signin API
+      const response = await fetch('/api/auth/cognito-signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email.trim(),
+          password: values.password,
+        }),
       });
 
-      if (result?.error) {
-        onNotification(result?.error, 'error');
-        setIsLoading(false);
-      } else {
-        // Save or remove email based on remember choice
-        if (values.remember) {
-          localStorage.setItem('rememberedEmail', values.email.trim());
-        } else {
-          localStorage.removeItem('rememberedEmail');
-        }
-        
-        // Update the session to ensure it reflects the latest authentication state
-        await update();
-        
+      const result = await response.json();
+      console.log("🚀 ~ onFinish ~ result:", result)
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Authentication failed');
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      message.error('An error occurred. Please try again.');
+
+      if (result.success && result.tokens) {
+        // Create NextAuth session using credentials provider with Cognito tokens
+        const authResult = await signIn('login', {
+          redirect: false,
+          email: values.email.trim(),
+          cognitoTokens: JSON.stringify(result.tokens),
+        });
+
+        if (authResult?.error) {
+          throw new Error(authResult.error);
+        }
+
+        message.success('Login successful!');
+        // Navigation will be handled by useEffect when status changes to 'authenticated'
+      } else if (result.challenge) {
+        // Handle challenges like MFA, password reset, etc.
+        onNotification(`Additional verification required: ${result.challenge}`, 'warning');
+      }
+    } catch (error: any) {
+      console.log('Login error:', error.message);
+      onNotification(error.message || 'An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMicrosoftLogin = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get Microsoft OAuth URL from our API
+      const response = await fetch('/api/auth/microsoft-oauth');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get Microsoft OAuth URL');
+      }
+      
+      // Redirect directly to Microsoft OAuth
+      window.location.href = data.authUrl;
+      
+    } catch (error: any) {
+      console.error('Microsoft login error:', error);
+      onNotification('Microsoft login failed. Please try again.', 'error');
       setIsLoading(false);
     }
   };
@@ -172,6 +218,26 @@ export default function SignInMain() {
             </BaseButton>
           </Form.Item>
         </Form>
+
+        <Divider className="!my-6">
+          <span className="text-gray-500 text-sm">OR</span>
+        </Divider>
+
+        <BaseButton
+          onClick={handleMicrosoftLogin}
+          loading={isLoading}
+          type="default"
+          block
+          className="!bg-white !border-gray-300 hover:!bg-gray-50 !h-12 flex items-center justify-center gap-3"
+        >
+          <Image
+            src="/images/icons/microsoft.svg"
+            alt="Microsoft"
+            width={20}
+            height={20}
+          />
+          <span className="text-gray-700 font-medium">Continue with Microsoft</span>
+        </BaseButton>
       </div>
       <div className="mt-[24px] flex justify-center items-center">
         <span className="text-[16px]">Don&apos;t have an account?</span>

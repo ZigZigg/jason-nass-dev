@@ -9,13 +9,16 @@ import { IconType } from 'antd/es/notification/interface';
 
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 
 export default function SignUpMain() {
+  const router = useRouter();
   const { api } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
-  const { update, status } = useSession();
+  const { status } = useSession();
   useUpdateStyle()
+  
   const onNotification = (description: string, type: IconType = 'error') => {
     api!.open({
       message: '',
@@ -25,7 +28,6 @@ export default function SignUpMain() {
       type: type,
     });
   };
-  // const dispatch = useDispatch();
 
   useEffect(() => {
     if(status === 'authenticated'){
@@ -45,22 +47,43 @@ export default function SignUpMain() {
         name: values.name.trim(),
       };
 
-      const result = await signIn('signup', {
-        redirect: false,
-        ...trimmedValues,
+      // Use Cognito signup API
+      const response = await fetch('/api/auth/cognito-signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(trimmedValues),
       });
 
-      if (result?.error) {
-        onNotification(result?.error, 'error');
-        setIsLoading(false);
-      } else {
-        // Update the session to ensure it reflects the latest authentication state
-        await update();
-        
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Registration failed');
       }
-    } catch (error) {
+
+      if (result.success) {
+        message.success('Registration successful! Please check your email for verification.');
+        
+        // If verification is not needed (auto-confirmed), try to sign in
+        if (!result.needsVerification) {
+          // Auto sign-in with Cognito provider
+          await signIn('cognito', {
+            email: trimmedValues.email,
+            callbackUrl: '/dashboard',
+          });
+        } else {
+          // Redirect to verification page or login page
+          onNotification('Please check your email and verify your account before signing in.', 'info');
+          setTimeout(() => {
+            router.push('/login');
+          }, 2000);
+        }
+      }
+    } catch (error: any) {
       console.error('SignUp error:', error);
-      message.error('An error occurred. Please try again.');
+      onNotification(error.message || 'An error occurred. Please try again.', 'error');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -69,7 +92,7 @@ export default function SignUpMain() {
     <div className="w-full h-auto md:h-[100vh] landscape:max-lg:h-[auto] flex flex-col align-center justify-center items-center px-[20px] landscape:max-lg:py-[24px] md:px-[0px] bg-[#F4F9FF] pb-[40px] md:pb-[0px]">
       <div className="flex flex-col justify-center items-center w-full h-fit md:w-[420px] p-[20px] md:p-[40px] bg-white rounded-[16px]">
         <Form
-          name="login"
+          name="signup"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           layout="vertical"
