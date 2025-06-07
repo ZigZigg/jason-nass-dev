@@ -10,7 +10,7 @@ interface FileInfo {
   size: string;
   path: string;
   type: FileType;
-  color: string;
+  color?: string;
 }
 
 // Article interface
@@ -22,51 +22,15 @@ interface Article {
   file: FileInfo;
 }
 
-// Mock data for resource articles
-const resourceArticles: Article[] = [
-  {
-    id: 1,
-    title: 'Building a Strategic Vision for Schools',
-    description:
-      "Learn how to craft a compelling vision statement that aligns with your district's goals and community values.",
-    imagePath: '/images/strategic-planning/subject-01.jpg',
-    file: {
-      name: 'Sample material.pdf',
-      size: '1.2 MB',
-      path: '/files/Sample material.pdf',
-      type: 'PDF',
-      color: '#D92D20',
-    },
-  },
-  {
-    id: 2,
-    title: 'Data-Driven Decision Making in Education',
-    description:
-      'Explore best practices for using data to inform policy decisions, resource allocation, and student outcomes.',
-    imagePath: '/images/strategic-planning/subject-02.jpg',
-    file: {
-      name: 'Sample material.pdf',
-      size: '1.2 MB',
-      path: '/files/Sample material.pdf',
-      type: 'PDF',
-      color: '#D92D20',
-    },
-  },
-  {
-    id: 3,
-    title: 'Engaging Stakeholders in Strategic Planning',
-    description:
-      "Discover strategies for involving teachers, parents, and community members in shaping your district's future.",
-    imagePath: '/images/strategic-planning/subject-03.jpg',
-    file: {
-      name: 'Book recommendation.docs',
-      size: '1.2 MB',
-      path: '/files/Book recommendation.docx',
-      type: 'DOC',
-      color: '#205A93',
-    },
-  },
-];
+// Resource Articles Data interface
+interface ResourceArticlesData {
+  title: string;
+  articles: Article[];
+}
+
+interface Props {
+  data: ResourceArticlesData;
+}
 
 // Document icon component
 const DocumentIcon: React.FC<{ fileType: 'PDF' | 'JPG' | 'DOC' }> = ({ fileType }) => {
@@ -148,15 +112,15 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
   );
 };
 
-const ResourceArticles: React.FC = () => {
+const ResourceArticles: React.FC<Props> = ({ data }) => {
   return (
     <div className="flex flex-col px-[16px] md:px-[0px] w-full md:w-[220px] xl:w-[320px] flex-shrink-0 gap-6">
       <h3 className="text-[32px] uppercase text-[#205A93] font-semibold">
-        Resource Articles
+        {data.title}
       </h3>
 
       <div className="flex flex-col gap-10">
-        {resourceArticles.map((article) => (
+        {data.articles.map((article) => (
           <ArticleItem key={article.id} article={article} />
         ))}
       </div>

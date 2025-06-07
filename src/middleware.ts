@@ -12,11 +12,15 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = !!token;
   
   // Define auth routes (public) and private routes
-  const isAuthRoute = ['/login', '/signup'].some(route => 
+  const isAuthRoute = ['/login', '/signup', '/forgot-password', '/reset-password'].some(route => 
     request.nextUrl.pathname.startsWith(route)
   );
   
   const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password'].some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  const isPublicRoute = ['/leadership'].some(route => 
     request.nextUrl.pathname.startsWith(route)
   );
 
@@ -25,13 +29,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // If authenticated user tries to access auth routes (login/signup)
-  if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
-  // If authenticated user accesses the root path
-  if (isAuthenticated && request.nextUrl.pathname === '/') {
+  // Redirect authenticated users from auth routes and root path to dashboard
+  if (isAuthenticated && (isAuthRoute || isPublicRoute || request.nextUrl.pathname === '/')) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 

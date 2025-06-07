@@ -2,31 +2,80 @@ import React from 'react'
 import Image from 'next/image'
 import StrategicPlanningSponsors from './Sponsors'
 
-const IntroductionVideo = () => {
+interface FileInfo {
+  name: string;
+  size: string;
+  path: string;
+  type: 'PDF' | 'JPG' | 'DOC';
+  color?: string;
+}
+
+interface Video {
+  id: number;
+  url: string;
+  thumbnail: string;
+  title: string;
+  quote?: string;
+  description?: string;
+  bulletPoints?: string[];
+  showDetail?: boolean;
+}
+
+interface IntroductionVideoData {
+  title: string;
+  videos: Video[];
+  keyTopicVideo: {
+    title: string;
+    video: Video;
+  };
+  monograph: {
+    title: string;
+    description: string;
+    bulletPoints: string[];
+    downloadFile: FileInfo;
+  };
+  sponsorsSlice: number;
+}
+
+interface Props {
+  data: IntroductionVideoData;
+}
+
+const IntroductionVideo = ({ data }: Props) => {
+  const mainVideo = data.videos[0]; // Get the first video for now
+
   return (
     <div className="flex-1 px-[16px] md:px-[0px] md:w-[60%] xl:w-auto">
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold">
-        Introduction Video
+        {data.title}
       </h3>
       
       <div className="bg-white rounded-md overflow-hidden">
         <div className="relative">
           {/* Video Container */}
           <div className="w-full aspect-video relative">
-            
-            <video 
-              className="w-full h-full object-cover rounded-t-md"
-              poster="/images/strategic-planning/video-thumb-01.png"
-              controls
-              src="https://assetsdev.jason.org/resource_assets/53727/32788/LEVL_VID_FeelingNinja.mp4"
-            />
+            {mainVideo.url ? (
+              <video 
+                className="w-full h-full object-cover rounded-t-md"
+                poster={mainVideo.thumbnail}
+                controls
+                src={mainVideo.url}
+              />
+            ) : (
+              <Image
+                src={mainVideo.thumbnail}
+                alt={mainVideo.title}
+                fill
+                className="object-cover rounded-t-md"
+              />
+            )}
           </div>
           
           {/* Video Content */}
           <div className="flex flex-col pt-[24px] pb-6">
             <div className="flex justify-between items-start gap-[20px]">
               <h4 className="text-[24px] font-bold m-0 text-[#212B36]">
-                A 1-minute message from Superintendent John Doe on the importance of strategic planning in school districts.
+                {mainVideo.title}
               </h4>
               <button 
                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100"
@@ -41,11 +90,13 @@ const IntroductionVideo = () => {
             
             <div>
               <p className="text-base text-[#637381] mb-2">
-                &ldquo;Strategic planning isn&apos;t just about setting goals—it&apos;s about creating a roadmap for meaningful, lasting impact.&rdquo;
+                &ldquo;{mainVideo.quote}&rdquo;
               </p>
-              <span className="text-sm text-[#0F72F3] cursor-pointer underline">
-                Show Detail
-              </span>
+              {mainVideo.showDetail && (
+                <span className="text-sm text-[#0F72F3] cursor-pointer underline">
+                  Show Detail
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -53,26 +104,35 @@ const IntroductionVideo = () => {
 
       {/* Key Topic Section */}
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
-        VIDEO KEY TOPIC
+        {data.keyTopicVideo.title}
       </h3>
       
       <div className="bg-white rounded-md overflow-hidden">
         <div className="relative">
           {/* Video Container */}
           <div className="w-full aspect-video relative">
-            <video 
-              className="w-full h-full object-cover rounded-t-md"
-              poster="/images/strategic-planning/video-thumb-02.png"
-              controls
-              src="https://assetsdev.jason.org/resource_assets/53727/32788/LEVL_VID_FeelingNinja.mp4"
-            />
+            {data.keyTopicVideo.video.url ? (
+              <video 
+                className="w-full h-full object-cover rounded-t-md"
+                poster={data.keyTopicVideo.video.thumbnail}
+                controls
+                src={data.keyTopicVideo.video.url}
+              />
+            ) : (
+              <Image
+                src={data.keyTopicVideo.video.thumbnail}
+                alt={data.keyTopicVideo.video.title}
+                fill
+                className="object-cover rounded-t-md"
+              />
+            )}
           </div>
           
           {/* Video Content */}
           <div className="flex flex-col pt-[24px] pb-6">
             <div className="flex justify-between items-start gap-[20px]">
               <h4 className="text-[24px] font-bold m-0 text-[#212B36]">
-                The Pillars of Strategic Planning
+                {data.keyTopicVideo.video.title}
               </h4>
               <button 
                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100"
@@ -87,12 +147,11 @@ const IntroductionVideo = () => {
             
             <div>
               <p className="text-base text-[#637381]">
-                This deep-dive video explains the essential pillars of an effective strategic plan, including:
+                {data.keyTopicVideo.video.description}
                 <br />
-                <span className="block pl-6 mt-1">• Vision & Mission Alignment</span>
-                <span className="block pl-6">• Stakeholder Engagement</span>
-                <span className="block pl-6">• Data-Driven Decision Making</span>
-                <span className="block pl-6">• Implementation & Accountability</span>
+                {data.keyTopicVideo.video.bulletPoints?.map((point, index) => (
+                  <span key={index} className="block pl-6 mt-1">• {point}</span>
+                ))}
               </p>
             </div>
           </div>
@@ -101,30 +160,29 @@ const IntroductionVideo = () => {
 
       {/* Monograph Section */}
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
-        MONOGRAPH: A SUPERINTENDENT&apos;S APPROACH TO STRATEGIC PLANNING
+        {data.monograph.title}
       </h3>
       
       <div className="flex flex-col gap-4">
         <p className="text-base text-[#637381]">
-          Superintendent John Doe outlines a step-by-step approach to developing a successful strategic plan. Key takeaways include:
+          {data.monograph.description}
           <br />
-          <span className="block pl-6 mt-1">• Building a shared vision</span>
-          <span className="block pl-6">• Defining measurable goals</span>
-          <span className="block pl-6">• Using data to drive continuous improvement</span>
-          <span className="block pl-6">• Ensuring community and staff buy-in</span>
+          {data.monograph.bulletPoints.map((point, index) => (
+            <span key={index} className="block pl-6 mt-1">• {point}</span>
+          ))}
         </p>
         
-        <a href="/files/Book recommendation.docx" download className="inline-block w-full md:w-fit">
+        <a href={data.monograph.downloadFile.path} download className="inline-block w-full md:w-fit">
           <div className="flex items-center gap-2 p-[10px_14px] bg-white border border-[#EAECF0] rounded-tr-lg rounded-br-lg rounded-bl-lg justify-between md:justify-start">
             <div className="flex items-center gap-2">
             <div className="relative w-8 h-8">
               {/* Document Icon */}
-              <Image src="/images/icons/doc-file-type.svg" alt="DOC" width={40} height={40} />
+              <Image src={`/images/icons/${data.monograph.downloadFile.type.toLowerCase()}-file-type.svg`} alt={data.monograph.downloadFile.type} width={40} height={40} />
             </div>
             
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-[#344054]">Book recommendation.docx</span>
-              <span className="text-sm text-[#475467]">1.2 MB</span>
+              <span className="text-sm font-medium text-[#344054]">{data.monograph.downloadFile.name}</span>
+              <span className="text-sm text-[#475467]">{data.monograph.downloadFile.size}</span>
             </div>
             </div>
 
@@ -137,7 +195,7 @@ const IntroductionVideo = () => {
           </div>
         </a>
       </div>
-      <StrategicPlanningSponsors slice={5} />
+      <StrategicPlanningSponsors slice={data.sponsorsSlice} />
     </div>
   )
 }
