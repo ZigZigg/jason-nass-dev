@@ -25,12 +25,12 @@ const LeadershipDetailPage = async ({ params }: LeadershipDetailPageProps) => {
         className={`flex flex-col md:flex-row h-auto md:h-[70px] flex w-full px-[16px] md:px-[0px] bg-[#fff] items-start md:items-center justify-between w-full gap-[22px]'
     }`}
       >
-        <div className="hidden md:flex items-center gap-1 md:mb-0">
+        <Link href="/" className="hidden md:flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link href="/" className="font-roboto text-[14px] text-[#212B36] hover:underline">
+          <span  className="font-roboto text-[14px] text-[#212B36] hover:underline">
             Back to NASS Home Page
-          </Link>
-        </div>
+          </span>
+        </Link>
         {pageData.heading && (
           <div className="flex items-center justify-start">
             <span
