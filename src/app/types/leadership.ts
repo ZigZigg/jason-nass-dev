@@ -26,6 +26,7 @@ export interface Article {
 }
 
 export interface StrategicPlanningData {
+  heading?: string;
   introductionVideo: {
     title: string;
     videos: Video[];
@@ -43,6 +44,7 @@ export interface StrategicPlanningData {
   };
   resourceArticles: {
     title: string;
+    subTitle?: string;
     articles: Article[];
   };
 } 

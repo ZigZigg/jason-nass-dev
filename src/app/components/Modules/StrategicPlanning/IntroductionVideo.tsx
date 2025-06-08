@@ -153,6 +153,11 @@ const IntroductionVideo = ({ data }: Props) => {
                   <span key={index} className="block pl-6 mt-1">• {point}</span>
                 ))}
               </p>
+              {mainVideo.showDetail && (
+                <span className="text-sm text-[#0F72F3] cursor-pointer underline">
+                  Show Detail
+                </span>
+              )}
             </div>
           </div>
         </div>

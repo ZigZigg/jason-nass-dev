@@ -220,6 +220,7 @@ const Header = () => {
 
   const pageActions = () => {
     const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
+    const isPublicPage = pathname.includes('/leadership');
     const isTransparentPage = ['/change-password'].includes(pathname);
     const isHomePage = ['/', '/dashboard'].includes(pathname);
     if (isHomePage) {
@@ -233,8 +234,8 @@ const Header = () => {
       >
         <div className="flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <Link href={isAuthPage ? '/' : '/dashboard'} className="font-roboto text-[14px] text-[#212B36] hover:underline">
-            {isAuthPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
+          <Link href={isAuthPage || isPublicPage ? '/' : '/dashboard'} className="font-roboto text-[14px] text-[#212B36] hover:underline">
+            {isAuthPage || isPublicPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
           </Link>
         </div>
       </div>

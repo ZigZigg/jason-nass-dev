@@ -25,6 +25,7 @@ interface Article {
 // Resource Articles Data interface
 interface ResourceArticlesData {
   title: string;
+  subTitle?: string;
   articles: Article[];
 }
 
@@ -115,10 +116,8 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
 const ResourceArticles: React.FC<Props> = ({ data }) => {
   return (
     <div className="flex flex-col px-[16px] md:px-[0px] w-full md:w-[220px] xl:w-[320px] flex-shrink-0 gap-6">
-      <h3 className="text-[32px] uppercase text-[#205A93] font-semibold">
-        {data.title}
-      </h3>
-
+      <h3 className="text-[32px] uppercase text-[#205A93] font-semibold">{data.title}</h3>
+      {data.subTitle && <p className="text-base text-[#637381]">{data.subTitle}</p>}
       <div className="flex flex-col gap-10">
         {data.articles.map((article) => (
           <ArticleItem key={article.id} article={article} />

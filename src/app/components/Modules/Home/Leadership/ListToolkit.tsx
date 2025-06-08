@@ -77,7 +77,7 @@ const ListToolkit = () => {
 
               {/* Bottom Title - Fixed height for alignment */}
               <div className="pt-2 flex items-center justify-center">
-                <h3 className="text-[14px] md:text-[16px] font-bold text-[#1d1d1f] text-center leading-[20px] md:leading-[25px] line-clamp-2 md:line-clamp-none">
+                <h3 className="text-[14px] md:text-[16px] font-bold text-[#1d1d1f] text-center leading-[20px] md:leading-[25px] line-clamp-2 md:line-clamp-none uppercase">
                   {item.label}
                 </h3>
               </div>

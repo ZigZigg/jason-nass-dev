@@ -3,6 +3,7 @@ import { StrategicPlanningData } from "@/app/types/leadership";
 export const mockLeadershipData: StrategicPlanningData[] = [
     {
       // Page 1: Communication
+      heading: 'Communication, Behaviors, Actions, Calm, Written, Oral',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -39,6 +40,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -66,6 +68,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 2: Strategic Planning
+      heading: 'Successful Strategic Planning ',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -102,6 +105,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -129,6 +133,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 3: Building Team
+      heading: 'Building A Cohesive Board/Superintendent/CFO Team',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -165,6 +170,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -192,6 +198,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 4: Navigating Politics
+      heading: 'Navigating Divergent Political Pressures',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -228,6 +235,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -255,6 +263,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 5: Technology and AI
+      heading: 'Technology and AI',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -291,6 +300,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -318,6 +328,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 6: Building Trust
+      heading: 'Building Trust and Rapport with Personnel',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -354,6 +365,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -381,6 +393,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 7: Crisis Management
+      heading: 'Crisis Management as CEO: Planning, Safety, Communication, Operations, Spokesperson',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -417,6 +430,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
@@ -435,7 +449,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           {
             id: 3,
             title: "WORKSHOP",
-            description: "Examine how superintendents can balance safety, messaging, and logistics while acting as the steady voice and strategic leader in times of uncertainty.",
+            description: "Learn how to prepare your leadership team, communicate effectively, and manage district operations when the unexpected occurs—before, during, and after a crisis.",
             imagePath: "/images/leadership/details/side-3.png",
             file: { name: "Download", size: "", path: "", type: "PDF" }
           }
@@ -444,6 +458,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
     },
     {
       // Page 8: Adapting to Change
+      heading: 'Adapting to Changing Dynamics',
       introductionVideo: {
         title: "INTRODUCTION VIDEO",
         videos: [{
@@ -480,6 +495,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       },
       resourceArticles: {
         title: "DISTRICT ARTIFACTS",
+        subTitle: "Items developed by your district that you are sharing with others to combat problems and create efficient solutions",
         articles: [
           {
             id: 1,
