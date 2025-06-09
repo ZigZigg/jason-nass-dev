@@ -39,6 +39,7 @@ export interface StrategicPlanningData {
       description: string;
       bulletPoints: string[];
       downloadFile: FileInfo;
+      isShowDetail?: boolean;
     };
     sponsorsSlice: number;
   };
