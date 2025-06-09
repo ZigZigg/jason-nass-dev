@@ -2,6 +2,7 @@ import { mockLeadershipData } from '@/app/components/Modules/Home/Leadership/moc
 import MainStrategicPlanning from '@/app/components/Modules/StrategicPlanning/Main';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import React from 'react';
 
 interface LeadershipDetailPageProps {
@@ -16,7 +17,7 @@ const LeadershipDetailPage = async ({ params }: LeadershipDetailPageProps) => {
   const pageData = mockLeadershipData[pageId - 1]; // Convert to 0-based index
 
   if (!pageData) {
-    return <div>Page not found</div>;
+    notFound();
   }
 
   return (
