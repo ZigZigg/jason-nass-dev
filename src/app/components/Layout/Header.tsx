@@ -220,7 +220,7 @@ const Header = () => {
 
   const pageActions = () => {
     const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
-    const isPublicPage = pathname.includes('/leadership');
+    const isPublicPage = pathname.includes('/leadership') || status === 'unauthenticated';
     const isTransparentPage = ['/change-password'].includes(pathname);
     const isHomePage = ['/', '/dashboard'].includes(pathname);
     if (isHomePage) {
@@ -233,10 +233,14 @@ const Header = () => {
         }`}
       >
         <Link href={isAuthPage || isPublicPage ? '/' : '/dashboard'} className="flex items-center gap-1 md:mb-0">
-          <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
-          <span  className="font-roboto text-[14px] text-[#212B36] hover:underline">
-            {isAuthPage || isPublicPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}
-          </span>
+        {
+          status !== 'loading' && (
+            <Link href="/" className="flex items-center gap-1 md:mb-0">
+              <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
+              <span className="font-roboto text-[14px] text-[#212B36] hover:underline">{isAuthPage || isPublicPage ? 'Back to NASS Home Page' : 'Back to Dashboard'}</span>
+            </Link>
+          )
+        }
         </Link>
       </div>
     );
