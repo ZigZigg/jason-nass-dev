@@ -29,7 +29,7 @@ const LeadershipDetailPage = async ({ params }: LeadershipDetailPageProps) => {
         <Link href="/" className="hidden md:flex items-center gap-1 md:mb-0">
           <Image src="/images/icons/arrow-back-grey.svg" alt="arrow-back" width={24} height={24} />
           <span  className="font-roboto text-[14px] text-[#212B36] hover:underline">
-            Back to NASS Home Page
+            Back to Dashboard
           </span>
         </Link>
         {pageData.heading && (

@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import VideoSection from './VideoSection';
 import StrategicPlanningSponsors from './Sponsors';
 
 interface FileInfo {
@@ -26,7 +27,7 @@ interface IntroductionVideoData {
   videos: Video[];
   keyTopicVideo: {
     title: string;
-    video: Video;
+    videos: Video[];
   };
   monograph: {
     title: string;
@@ -43,136 +44,17 @@ interface Props {
 }
 
 const IntroductionVideo = ({ data }: Props) => {
-  const mainVideo = data.videos[0]; // Get the first video for now
-
   return (
-    <div className="flex-1 px-[16px] md:px-[0px] md:w-[60%] xl:w-auto">
+    <div className="flex-1 px-[16px] md:px-[0px] md:w-[60%] xl:max-w-none xl:flex-1">
+      {/* Introduction Videos Section */}
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold">{data.title}</h3>
+      <VideoSection videos={data.videos} />
 
-      <div className="bg-white rounded-md overflow-hidden">
-        <div className="relative">
-          {/* Video Container */}
-          <div className="w-full aspect-video relative">
-            {mainVideo.url ? (
-              <video
-                className="w-full h-full object-cover rounded-t-md"
-                poster={mainVideo.thumbnail}
-                controls
-                src={mainVideo.url}
-              />
-            ) : (
-              <Image
-                src={mainVideo.thumbnail}
-                alt={mainVideo.title}
-                fill
-                className="object-cover rounded-t-md"
-              />
-            )}
-          </div>
-
-          {/* Video Content */}
-          <div className="flex flex-col pt-[24px] pb-6">
-            <div className="flex justify-between items-start gap-[20px]">
-              <h4 className="text-[24px] font-bold m-0 text-[#212B36]">{mainVideo.title}</h4>
-              <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#667085"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="border-t border-[#D0D5DD] border-opacity-50 my-2"></div>
-
-            <div>
-              <p className="text-base text-[#637381] mb-2">&ldquo;{mainVideo.quote}&rdquo;</p>
-              {mainVideo.showDetail && (
-                <span className="text-sm text-[#0F72F3] cursor-pointer underline">Show Detail</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Key Topic Section */}
+      {/* Key Topic Videos Section */}
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
         {data.keyTopicVideo.title}
       </h3>
-
-      <div className="bg-white rounded-md overflow-hidden">
-        <div className="relative">
-          {/* Video Container */}
-          <div className="w-full aspect-video relative">
-            {data.keyTopicVideo.video.url ? (
-              <video
-                className="w-full h-full object-cover rounded-t-md"
-                poster={data.keyTopicVideo.video.thumbnail}
-                controls
-                src={data.keyTopicVideo.video.url}
-              />
-            ) : (
-              <Image
-                src={data.keyTopicVideo.video.thumbnail}
-                alt={data.keyTopicVideo.video.title}
-                fill
-                className="object-cover rounded-t-md"
-              />
-            )}
-          </div>
-
-          {/* Video Content */}
-          <div className="flex flex-col pt-[24px] pb-6">
-            <div className="flex justify-between items-start gap-[20px]">
-              <h4 className="text-[24px] font-bold m-0 text-[#212B36]">
-                {data.keyTopicVideo.video.title}
-              </h4>
-              <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#667085"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="border-t border-[#D0D5DD] border-opacity-50 my-2"></div>
-
-            <div>
-              <p className="text-base text-[#637381]">
-                {data.keyTopicVideo.video.description}
-                <br />
-                {data.keyTopicVideo.video.bulletPoints?.map((point, index) => (
-                  <span key={index} className="block pl-6 mt-1">
-                    • {point}
-                  </span>
-                ))}
-              </p>
-              {mainVideo.showDetail && (
-                <span className="text-sm text-[#0F72F3] cursor-pointer underline">Show Detail</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <VideoSection videos={data.keyTopicVideo.videos} isKeyTopic={true} />
 
       {/* Monograph Section */}
       <h3 className="text-[32px] uppercase text-[#205A93] mb-6 font-semibold mt-8">
@@ -183,9 +65,11 @@ const IntroductionVideo = ({ data }: Props) => {
         <p className="text-base text-[#637381]">
           {data.monograph.description}
           <br />
-          {data.monograph.isShowDetail && (
-            <span className="text-sm text-[#0F72F3] cursor-pointer underline">Show Detail</span>
-          )}
+          {data.monograph.bulletPoints.map((point, index) => (
+            <span key={index} className="block pl-6 mt-1">
+              • {point}
+            </span>
+          ))}
         </p>
 
         <a
@@ -214,21 +98,7 @@ const IntroductionVideo = ({ data }: Props) => {
             </div>
 
             <div className="ml-2 flex items-center justify-center">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.0003 13.3327L10.0003 3.33268M10.0003 13.3327L6.66699 9.99935M10.0003 13.3327L13.3337 9.99935M3.33366 16.666H16.667"
-                  stroke="#344054"
-                  strokeWidth="1.67"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Image src="/images/icons/download.svg" alt="Download" width={20} height={20} />
             </div>
           </div>
         </a>

@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
-import ListToolkit from './ListToolkit';
+// import ListToolkit from './ListToolkit';
 
 const LeadershipToolkit = () => {
   return (
-    <section id="leadership-toolkit" className="bg-[#f7f7f7] py-[14px]">
+    <section id="leadership-toolkit" className="bg-[#f7f7f7] pt-[14px] pb-[24px]">
       <div
         id="leadership-toolkit-intro"
         className="mx-auto max-w-full md:max-w-[720px] xl:max-w-[1280px] px-[16px] md:px-[0px]"
@@ -79,7 +79,7 @@ const LeadershipToolkit = () => {
           </div>
         </div>
       </div>
-      <ListToolkit />
+      {/* <ListToolkit /> */}
     </section>
   );
 };

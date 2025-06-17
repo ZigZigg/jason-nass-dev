@@ -16,13 +16,13 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(route)
   );
   
-  const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password'].some(route => 
+  const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password', '/leadership'].some(route => 
     request.nextUrl.pathname.startsWith(route)
   );
 
-  const isPublicRoute = ['/leadership'].some(route => 
-    request.nextUrl.pathname.startsWith(route)
-  );
+  // const isPublicRoute = ['/leadership'].some(route => 
+  //   request.nextUrl.pathname.startsWith(route)
+  // );
 
   // If trying to access private route without authentication
   if (isPrivateRoute && !isAuthenticated) {
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect authenticated users from auth routes and root path to dashboard
-  if (isAuthenticated && (isAuthRoute || isPublicRoute || request.nextUrl.pathname === '/')) {
+  if (isAuthenticated && (isAuthRoute || request.nextUrl.pathname === '/')) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 

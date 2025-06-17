@@ -220,7 +220,7 @@ const Header = () => {
 
   const pageActions = () => {
     const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
-    const isPublicPage = pathname.includes('/leadership') || status === 'unauthenticated';
+    const isPublicPage =  status === 'unauthenticated';
     const isTransparentPage = ['/change-password'].includes(pathname);
     const isHomePage = ['/', '/dashboard'].includes(pathname);
     if (isHomePage) {

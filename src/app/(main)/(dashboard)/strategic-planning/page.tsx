@@ -19,7 +19,7 @@ const strategicPlanningData = {
     ],
     keyTopicVideo: {
       title: 'Video Key Topic',
-      video: {
+      videos:[{
         id: 2,
         url: 'https://assetsdev.jason.org/resource_assets/53727/32788/LEVL_VID_FeelingNinja.mp4',
         thumbnail: '/images/strategic-planning/video-thumb-02.png',
@@ -31,7 +31,7 @@ const strategicPlanningData = {
           'Data-Driven Decision Making',
           'Implementation & Accountability'
         ]
-      }
+      }]
     },
     monograph: {
       title: 'Monograph: A Superintendent\'s Approach to Strategic Planning',

@@ -65,7 +65,7 @@ const Testimonial = () => {
 
   return (
     <section className="bg-[#EEF8FF] py-[80px] xl:py-[100px]">
-      <div id="testimonial-content" className="mx-auto max-w-full md:max-w-[720px] xl:max-w-[1280px] px-[16px] md:px-[0px] flex flex-col items-center gap-6">
+      <div id="testimonial-content" className="mx-auto max-w-full flex flex-col items-center gap-6">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={30}

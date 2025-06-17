@@ -22,6 +22,7 @@ export interface Article {
   title: string;
   description: string;
   imagePath: string;
+  videos?: Video[];
   file: FileInfo;
 }
 
@@ -32,7 +33,7 @@ export interface StrategicPlanningData {
     videos: Video[];
     keyTopicVideo: {
       title: string;
-      video: Video;
+      videos: Video[];
     };
     monograph: {
       title: string;

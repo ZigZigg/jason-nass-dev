@@ -1,5 +1,12 @@
+'use client';
+import { Video } from '@/app/types/leadership';
 import Image from 'next/image';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/css';
 
 // Define file type for articles
 type FileType = 'PDF' | 'JPG' | 'DOC';
@@ -20,6 +27,7 @@ interface Article {
   description: string;
   imagePath: string;
   file: FileInfo;
+  videos?: Video[];
 }
 
 // Resource Articles Data interface
@@ -86,19 +94,111 @@ const FileDownload: React.FC<{ file: FileInfo }> = ({ file }) => {
   );
 };
 
-// Article component
-const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
+// Media component for individual video/image
+const MediaItem: React.FC<{ video?: Video; imagePath?: string; title: string; isActive?: boolean }> = ({ 
+  video, 
+  imagePath, 
+  title, 
+  isActive = true 
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Pause video when slide becomes inactive
+  React.useEffect(() => {
+    if (!isActive && videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, [isActive]);
+
   return (
-    <div className="flex flex-col gap-8">
-      <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
+    <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
+      {video?.url ? (
+        <video
+          ref={videoRef}
+          className="w-full h-full rounded-lg"
+          poster={video.thumbnail}
+          controls
+          src={video.url}
+        />
+      ) : (
         <Image
-          src={article.imagePath}
-          alt={article.title}
+          src={video?.thumbnail || imagePath || ''}
+          alt={title}
           className="object-cover"
           fill
           sizes="(max-width: 768px) 100vw, 320px"
         />
+      )}
+    </div>
+  );
+};
+
+// Article component
+const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
+
+  const hasVideos = article.videos && article.videos.length > 0;
+  const hasMultipleVideos = hasVideos && article.videos!.length > 1;
+
+  const renderMedia = () => {
+    if (!hasVideos) {
+      // Show static image
+      return <MediaItem imagePath={article.imagePath} title={article.title} />;
+    }
+
+    if (!hasMultipleVideos) {
+      // Show single video
+      return <MediaItem video={article.videos![0]} title={article.title} />;
+    }
+
+    // Show carousel for multiple videos
+    return (
+      <div className="relative">
+        <Swiper
+          modules={[]}
+          spaceBetween={0}
+          slidesPerView={1}
+          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+          onSwiper={(swiperInstance) => {
+            setSwiper(swiperInstance);
+          }}
+          className="article-media-carousel !w-full"
+          style={{ width: '100%' }}
+        >
+          {article.videos!.map((video, index) => (
+            <SwiperSlide key={video.id}>
+              <MediaItem 
+                video={video} 
+                title={article.title} 
+                isActive={index === activeIndex} 
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Custom Pagination Dots - Outside Swiper */}
+        <div className="flex justify-center items-center gap-2 mt-3">
+          {article.videos!.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => swiper?.slideTo(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                index === activeIndex
+                  ? 'bg-[#205A93] w-6' // Active dot - longer and blue
+                  : 'bg-gray-300 hover:bg-gray-400' // Inactive dot - gray with hover
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-8">
+      {renderMedia()}
 
       <div className="flex flex-col gap-3">
         <h4 className="text-[24px] md:text-[18px] xl:text-[24px] font-bold text-[#11304E]">
