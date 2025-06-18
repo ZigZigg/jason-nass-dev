@@ -95,11 +95,18 @@ const FileDownload: React.FC<{ file: FileInfo }> = ({ file }) => {
 };
 
 // Media component for individual video/image
-const MediaItem: React.FC<{ video?: Video; imagePath?: string; title: string; isActive?: boolean }> = ({ 
+const MediaItem: React.FC<{ 
+  video?: Video; 
+  imagePath?: string; 
+  title: string; 
+  isActive?: boolean; 
+  shouldLoad?: boolean; 
+}> = ({ 
   video, 
   imagePath, 
   title, 
-  isActive = true 
+  isActive = true,
+  shouldLoad = true 
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -112,12 +119,14 @@ const MediaItem: React.FC<{ video?: Video; imagePath?: string; title: string; is
 
   return (
     <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
-      {video?.url ? (
+      {video?.url && shouldLoad ? (
         <video
           ref={videoRef}
           className="w-full h-full rounded-lg"
           poster={video.thumbnail}
           controls
+          playsInline
+          webkit-playsinline="true"
           src={video.url}
         />
       ) : (
@@ -137,9 +146,24 @@ const MediaItem: React.FC<{ video?: Video; imagePath?: string; title: string; is
 const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [loadedVideos, setLoadedVideos] = useState(new Set([0])); // Start with first video loaded
 
   const hasVideos = article.videos && article.videos.length > 0;
   const hasMultipleVideos = hasVideos && article.videos!.length > 1;
+
+  // Load video when it becomes active or adjacent (preload next/prev)
+  const handleSlideChange = (swiper: SwiperType) => {
+    const newActiveIndex = swiper.activeIndex;
+    setActiveIndex(newActiveIndex);
+    
+    // Load current, previous, and next videos for smooth navigation
+    const toLoad = new Set(loadedVideos);
+    toLoad.add(newActiveIndex);
+    if (newActiveIndex > 0) toLoad.add(newActiveIndex - 1);
+    if (newActiveIndex < article.videos!.length - 1) toLoad.add(newActiveIndex + 1);
+    
+    setLoadedVideos(toLoad);
+  };
 
   const renderMedia = () => {
     if (!hasVideos) {
@@ -148,18 +172,18 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
     }
 
     if (!hasMultipleVideos) {
-      // Show single video
-      return <MediaItem video={article.videos![0]} title={article.title} />;
+      // Show single video - always load immediately
+      return <MediaItem video={article.videos![0]} title={article.title} shouldLoad={true} />;
     }
 
-    // Show carousel for multiple videos
+    // Show carousel for multiple videos with lazy loading
     return (
       <div className="relative">
         <Swiper
           modules={[]}
           spaceBetween={0}
           slidesPerView={1}
-          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+          onSlideChange={handleSlideChange}
           onSwiper={(swiperInstance) => {
             setSwiper(swiperInstance);
           }}
@@ -171,7 +195,8 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
               <MediaItem 
                 video={video} 
                 title={article.title} 
-                isActive={index === activeIndex} 
+                isActive={index === activeIndex}
+                shouldLoad={loadedVideos.has(index)}
               />
             </SwiperSlide>
           ))}

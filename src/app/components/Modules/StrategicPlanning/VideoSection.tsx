@@ -25,7 +25,15 @@ interface VideoSectionProps {
 }
 
 // Media component for individual video/image
-const MediaItem = ({ video, isActive = true }: { video: Video; isActive?: boolean }) => {
+const MediaItem = ({ 
+  video, 
+  isActive = true, 
+  shouldLoad = true 
+}: { 
+  video: Video; 
+  isActive?: boolean; 
+  shouldLoad?: boolean; 
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Pause video when slide becomes inactive
@@ -37,12 +45,14 @@ const MediaItem = ({ video, isActive = true }: { video: Video; isActive?: boolea
 
   return (
     <div className="w-full aspect-video relative">
-      {video.url ? (
+      {video.url && shouldLoad ? (
         <video
           ref={videoRef}
           className="w-full h-full rounded-t-md"
           poster={video.thumbnail}
           controls
+          playsInline
+          webkit-playsinline="true"
           src={video.url}
         />
       ) : (
@@ -96,27 +106,42 @@ const VideoContent = ({ video, isKeyTopic = false }: { video: Video; isKeyTopic?
 const VideoSection = ({ videos, isKeyTopic = false }: VideoSectionProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [loadedVideos, setLoadedVideos] = useState(new Set([0])); // Start with first video loaded
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
 
   const currentVideo = videos[activeIndex] || videos[0];
+
+  // Load video when it becomes active or adjacent (preload next/prev)
+  const handleSlideChange = (swiper: SwiperType) => {
+    const newActiveIndex = swiper.activeIndex;
+    setActiveIndex(newActiveIndex);
+    
+    // Load current, previous, and next videos for smooth navigation
+    const toLoad = new Set(loadedVideos);
+    toLoad.add(newActiveIndex);
+    if (newActiveIndex > 0) toLoad.add(newActiveIndex - 1);
+    if (newActiveIndex < videos.length - 1) toLoad.add(newActiveIndex + 1);
+    
+    setLoadedVideos(toLoad);
+  };
 
   return (
     <div className="bg-white rounded-md overflow-hidden">
       <div className="relative">
         {/* Media Container - Single or Carousel */}
         {videos.length <= 1 ? (
-          // Single video/image
-          <MediaItem video={videos[0]} isActive={true} />
+          // Single video/image - always load immediately
+          <MediaItem video={videos[0]} isActive={true} shouldLoad={true} />
         ) : (
-          // Multiple videos - carousel for media only
+          // Multiple videos - carousel with lazy loading
           <>
             <div className="relative w-full overflow-hidden">
               <Swiper
                 modules={[]}
                 spaceBetween={0}
                 slidesPerView={1}
-                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                onSlideChange={handleSlideChange}
                 onSwiper={(swiperInstance) => {
                   setSwiper(swiperInstance);
                 }}
@@ -125,7 +150,11 @@ const VideoSection = ({ videos, isKeyTopic = false }: VideoSectionProps) => {
               >
                 {videos.map((video, index) => (
                   <SwiperSlide key={video.id}>
-                    <MediaItem video={video} isActive={index === activeIndex} />
+                    <MediaItem 
+                      video={video} 
+                      isActive={index === activeIndex} 
+                      shouldLoad={loadedVideos.has(index)}
+                    />
                   </SwiperSlide>
                 ))}
               </Swiper>
