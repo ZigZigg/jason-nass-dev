@@ -135,8 +135,7 @@ export default function DashboardPage() {
         label: 'Adapting to Changing Dynamics',
         imageUrl: '/images/leadership/adapting-module.png'
     },
-]
-
+];
 
   return (
     <div className="w-full h-full w-full md:w-[720px] xl:w-[1280px] px-[16px] md:px-[0px] py-[24px] mx-auto">
@@ -171,12 +170,17 @@ export default function DashboardPage() {
               </div>
 
               {/* Image Container - Fixed height for row alignment */}
-              <div className="relative overflow-hidden flex-shrink-0 border-y-[2px] border-[#000]">
+              <div className="relative overflow-hidden flex-shrink-0 border-y-[2px] border-[#000] bg-gray-100">
                 <Image
                   src={item.imageUrl}
-                  alt={item.label}
+                  alt={`${item.label} - Leadership module`}
                   width={224}
                   height={140}
+                  priority={index < 4} // Prioritize above-the-fold images
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 224px"
+                  quality={85}
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   className="object-cover w-full group-hover:scale-105 transition-transform duration-300 aspect-[224/140]"
                 />
               </div>

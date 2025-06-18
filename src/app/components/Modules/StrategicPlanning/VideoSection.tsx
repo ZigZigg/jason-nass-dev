@@ -134,7 +134,7 @@ const VideoSection = ({ videos, isKeyTopic = false }: VideoSectionProps) => {
               <button
                 ref={prevRef}
                 onClick={() => swiper?.slidePrev()}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 pointer-events-auto cursor-pointer"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 bg-white/90 hover:bg-white rounded-full hidden md:flex items-center justify-center shadow-lg transition-all duration-200 pointer-events-auto cursor-pointer "
                 aria-label="Previous video"
                 style={{ zIndex: 50 }}
               >
@@ -150,7 +150,7 @@ const VideoSection = ({ videos, isKeyTopic = false }: VideoSectionProps) => {
               <button
                 ref={nextRef}
                 onClick={() => swiper?.slideNext()}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 pointer-events-auto cursor-pointer"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 bg-white/90 hover:bg-white rounded-full hidden md:flex items-center justify-center shadow-lg transition-all duration-200 pointer-events-auto cursor-pointer"
                 aria-label="Next video"
                 style={{ zIndex: 50 }}
               >

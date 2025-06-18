@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(route)
   );
   
-  const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password', '/leadership'].some(route => 
+  const isPrivateRoute = ['/dashboard', '/strategic-planning', '/change-password'].some(route => 
     request.nextUrl.pathname.startsWith(route)
   );
 
