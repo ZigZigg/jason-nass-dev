@@ -203,12 +203,12 @@ const ArticleItem: React.FC<{ article: Article }> = ({ article }) => {
         </Swiper>
 
         {/* Custom Pagination Dots - Outside Swiper */}
-        <div className="flex justify-center items-center gap-2 mt-3">
+        <div className="flex justify-center items-center gap-4 mt-3">
           {article.videos!.map((_, index) => (
             <button
               key={index}
               onClick={() => swiper?.slideTo(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${
+              className={`w-3 h-3 rounded-full transition-all duration-200 ${
                 index === activeIndex
                   ? 'bg-[#205A93] w-6' // Active dot - longer and blue
                   : 'bg-gray-300 hover:bg-gray-400' // Inactive dot - gray with hover
