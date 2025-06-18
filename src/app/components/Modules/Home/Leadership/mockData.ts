@@ -163,7 +163,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       videos: [
         {
           id: 1,
-          url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/05-nass.mp4',
+          url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/01-nass.mp4',
           thumbnail: '/images/leadership/details/video-thumb-3-1.png',
           title: 'A personal 1-minute introduction video about Superintendent Kirk Koennecke',
           quote:
@@ -176,7 +176,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
         videos: [
           {
             id: 2,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/01-nass.mp4',
+            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/04-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
@@ -185,7 +185,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           },
           {
             id: 3,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/04-nass.mp4',
+            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/05-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
