@@ -163,7 +163,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
       videos: [
         {
           id: 1,
-          url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/01-nass.mp4',
+          url: 'https://du1gn4yt2gmv.cloudfront.net/01-nass.mp4',
           thumbnail: '/images/leadership/details/video-thumb-3-1.png',
           title: 'A personal 1-minute introduction video about Superintendent Kirk Koennecke',
           quote:
@@ -176,7 +176,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
         videos: [
           {
             id: 2,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/04-nass.mp4',
+            url: 'https://du1gn4yt2gmv.cloudfront.net/04-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
@@ -185,7 +185,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           },
           {
             id: 3,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/05-nass.mp4',
+            url: 'https://du1gn4yt2gmv.cloudfront.net/05-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
@@ -194,7 +194,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           },
           {
             id: 4,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/06-nass.mp4',
+            url: 'https://du1gn4yt2gmv.cloudfront.net/06-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
@@ -203,7 +203,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           },
           {
             id: 5,
-            url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/09-nass.mp4',
+            url: 'https://du1gn4yt2gmv.cloudfront.net/09-nass.mp4',
             thumbnail: '/images/leadership/details/video-thumb-3-2.png',
             title: 'Building A Cohesive Board/Superintendent/CFO Team',
             description:
@@ -258,7 +258,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
           videos: [
             {
               id: 2,
-              url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/02-nass.mp4',
+              url: 'https://du1gn4yt2gmv.cloudfront.net/02-nass.mp4',
               thumbnail: '/images/leadership/details/side-3.png',
               title: 'Building A Cohesive Board/Superintendent/CFO Team',
               description:
@@ -267,7 +267,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
             },
             {
               id: 3,
-              url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/03-nass.mp4',
+              url: 'https://du1gn4yt2gmv.cloudfront.net/03-nass.mp4',
               thumbnail: '/images/leadership/details/side-3.png',
               title: 'Building A Cohesive Board/Superintendent/CFO Team',
               description:
@@ -276,7 +276,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
             },
             {
               id: 4,
-              url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/07-nass.mp4',
+              url: 'https://du1gn4yt2gmv.cloudfront.net/07-nass.mp4',
               thumbnail: '/images/leadership/details/side-3.png',
               title: 'Building A Cohesive Board/Superintendent/CFO Team',
               description:
@@ -285,7 +285,7 @@ export const mockLeadershipData: StrategicPlanningData[] = [
             },
             {
               id: 5,
-              url: 'https://ttk-test-001.s3.ap-southeast-1.amazonaws.com/videos-jason/08-nass.mp4',
+              url: 'https://du1gn4yt2gmv.cloudfront.net/08-nass.mp4',
               thumbnail: '/images/leadership/details/side-3.png',
               title: 'Building A Cohesive Board/Superintendent/CFO Team',
               description:
